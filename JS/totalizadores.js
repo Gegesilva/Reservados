@@ -19,10 +19,10 @@ function calculateTotals() {
 
     document.querySelectorAll('tbody tr').forEach(row => {
         totalValorBase += parseCurrency(row.cells[2].textContent);
-        totalValorIPI += parseCurrency(row.cells[4].textContent);
-        totalST += parseCurrency(row.cells[5].textContent);
-        totalDifalST += parseCurrency(row.cells[6].textContent);
-        totalValorFinal += parseCurrency(row.cells[7].textContent);
+        totalValorIPI += parseCurrency(row.cells[3].textContent);
+        totalST += parseCurrency(row.cells[4].textContent);
+        totalDifalST += parseCurrency(row.cells[5].textContent);
+        totalValorFinal += parseCurrency(row.cells[6].textContent);
     });
 
     document.getElementById('totalValorBase').textContent = formatToCurrency(totalValorBase);

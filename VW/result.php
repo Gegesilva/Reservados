@@ -197,9 +197,9 @@ if ($consumo == 'N') {
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th colspan="2">Total</th>
-                        <th id="totalValorBase" class="currency">R$ 0,00</th>
+                        <th colspan="1">Total</th>
                         <th></th>
+                        <th id="totalValorBase" class="currency">R$ 0,00</th>
                         <th id="totalValorIPI" class="currency">R$ 0,00</th>
                         <th id="totalST" class="currency">R$ 0,00</th>
                         <th id="totalDifalST" class="currency">R$ 0,00</th>

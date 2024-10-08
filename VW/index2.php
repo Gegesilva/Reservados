@@ -50,7 +50,7 @@ if ($seriesSelecionadasAspas) {
             <h1 class="titulos"></h1>
             <div class="buttons-forms">
                 <button class="btn-req" id="btn-req" onClick="voltar();" type="submit"
-                    class="voltar-btn-form">Maquinas</button>
+                    class="voltar-btn-form">EQUIPAMENTOS</button>
                 <button class="btn-req" id="btn-req-sup" style="color: black; opacity: 0.4;"
                     onClick="window.location='index2.php';" type="submit" class="voltar-btn-form">SUPRIMENTOS</button>
             </div>
