@@ -13,6 +13,7 @@ $consumo = $_POST['consumo'];
 $condicao = $_POST['condicao'];
 $tabelaCust = $_POST['tabela'];
 $classificacao = $_POST['class'];
+$clienteForm = $_POST['cliente'];
 $cliente = $pessoa . ':' . $estado;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -21,7 +22,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 /* Pega o codigo da cindição pelo nome passado pelo input da lista */
-$sql = "SELECT TB01014_CODIGO Cod FROM TB01014
+$sql = "SELECT TB01014_CODIGO Cod 
+        FROM TB01014
         WHERE TB01014_NOME = '$condicao'";
 
 $stmt = sqlsrv_query($conn, $sql);
@@ -39,6 +41,24 @@ $stmt = sqlsrv_query($conn, $sql);
 
 while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
     $tabelaCustCod = $row['Cod'];
+}
+
+/* Pega o codigo da tabela pelo nome passado pelo input da cliente */
+$sql = "SELECT TB01008_CODIGO Cod FROM TB01008 
+        WHERE TB01008_SITUACAO = 'A'
+        AND TB01008_NOME = '$clienteForm'";
+
+$stmt = sqlsrv_query($conn, $sql);
+
+while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+    $CodCliente = $row['Cod'];
+}
+
+/* Testa para ver oq foi preenchido no form Cliente/estado */
+if($clienteForm){
+    $definiCli = $CodCliente;
+}else{
+    $definiCli = $cliente;
 }
 
 /* Da o nome correto para a variavel consumo */
@@ -68,16 +88,16 @@ if ($consumo == 'N') {
         <img class="logo" src="../img/logo.jpg" alt="logo">
         <div class="info-bloco">
             <div>
-                <span><b>Estado:</b> <?= $estado; ?></span>
-                <span><b>Pessoa</b>: <?= $cliente; ?></span>
+                <span><b><?= $clienteForm ? "Cliente: " : "Estado: " ?></b> <?= $clienteForm ? $clienteForm : $estado; ?></span>
+                <span><b>Pessoa: </b> <?= $cliente; ?></span>
             </div>
             <div>
-                <span><b>Tipo Consumo:</b> <?= $nomeConsumo; ?></span>
-                <span><b>Condição:</b> <?= $condicao; ?></span>
+                <span><b>Tipo Consumo: </b> <?= $nomeConsumo; ?></span>
+                <span><b>Condição: </b> <?= $condicao; ?></span>
             </div>
             <div>
-                <span><b>Tabela:</b> <?= $tabelaCust; ?></span>
-                <span><b>Classificação:</b> <?= $classificacao; ?></span>
+                <span><b>Tabela: </b> <?= $tabelaCust; ?></span>
+                <span><b>Classificação: </b> <?= $classificacao; ?></span>
             </div>
         </div>
     </div>
@@ -129,7 +149,7 @@ if ($consumo == 'N') {
                                         SELECT @PRODUTO = (select top 1 TB02054_PRODUTO FROM TB02054 WHERE TB02054_NUMSERIE = @SERIAL and TB02054_CODEMP = @EMPRESA AND TB02054_QTPROD > TB02054_QTPRODS) 
                                         SELECT @OPERACAO = '00'; --Fixo 00
                                         SELECT @CONDICAO = '$codCond'; -- Lista suspensa da TB01014
-                                        SELECT @CLIENTE = '$cliente'; -- F: ou J: + estado
+                                        SELECT @CLIENTE = '$definiCli'; -- F: ou J: + estado
                                         SELECT @VENDACONS = '$consumo'; --'N' REVENDA / 'S' CONSUMO
                                         SELECT @TABELA = '$tabelaCustCod'; 
                                         SELECT @VALORINICIAL = 0; -- FIXAR 0

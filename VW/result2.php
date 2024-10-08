@@ -13,6 +13,7 @@ $consumo = $_POST['consumo'];
 $condicao = $_POST['condicao'];
 $tabelaCust = $_POST['tabela'];
 $classificacao = $_POST['class'];
+$clienteForm = $_POST['cliente'];
 $cliente = $pessoa . ':' . $estado;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -39,6 +40,24 @@ $stmt = sqlsrv_query($conn, $sql);
 
 while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
     $tabelaCustCod = $row['Cod'];
+}
+
+/* Pega o codigo da tabela pelo nome passado pelo input da cliente */
+$sql = "SELECT TB01008_CODIGO Cod FROM TB01008 
+        WHERE TB01008_SITUACAO = 'A'
+        AND TB01008_NOME = '$clienteForm'";
+
+$stmt = sqlsrv_query($conn, $sql);
+
+while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+    $CodCliente = $row['Cod'];
+}
+
+/* Testa para ver oq foi preenchido no form Cliente/estado */
+if($clienteForm){
+    $definiCli = $CodCliente;
+}else{
+    $definiCli = $cliente;
 }
 
 /* Da o nome correto para a variavel consumo */
@@ -75,7 +94,7 @@ if ($tipo == '00') {
         <img class="logo" src="../img/logo.jpg" alt="logo">
         <div class="info-bloco">
             <div>
-                <span><b>Estado:</b> <?= $estado; ?></span>
+                <span><b><?= $clienteForm ? "Cliente: " : "Estado: " ?></b> <?= $clienteForm ? $clienteForm : $estado; ?></span>
                 <span><b>Pessoa</b>: <?= $cliente; ?></span>
             </div>
             <div>
@@ -127,7 +146,7 @@ if ($tipo == '00') {
                                 SELECT @PRODUTO = '$produto';
                                 SELECT @OPERACAO = '$tipo';
                                 SELECT @CONDICAO = '$codCond';
-                                SELECT @CLIENTE = '$cliente'; --00000780
+                                SELECT @CLIENTE = '$definiCli'; --00000780
                                 SELECT @VENDACONS = '$consumo';
                                 SELECT @TABELA = '$tabelaCustCod';
                                 SELECT @VALORINICIAL = 0;

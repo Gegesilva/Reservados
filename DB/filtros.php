@@ -87,3 +87,29 @@ function filtroClass($conn)
     }
     return print ($opcao);
 }
+
+
+
+function filtroCliente($conn)
+{
+    $sql = "SELECT 
+                TB01008_CODIGO Cod,
+                TB01008_NOME Nome
+            FROM TB01008
+            WHERE TB01008_SITUACAO = 'A'";
+
+    $stmt = sqlsrv_query($conn, $sql);
+
+    if ($stmt === false) {
+        die(print_r(sqlsrv_errors(), true));
+    }
+
+
+    $opcao = "";
+
+    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+        $opcao .= "<div  data-tabela='$row[Cod]'>$row[Nome]</div>";
+
+    }
+    return print ($opcao);
+}

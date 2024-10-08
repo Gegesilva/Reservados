@@ -70,10 +70,10 @@ if ($seriesSelecionadasAspas) {
                         </select>
                     </div>
                     <div class="form-input">
-                        <label for="estado">Estado*</label>
+                        <label for="estado">Estado *</label>
                         <div class="custom-select">
                             <input type="text" name="estado" class="estado" id="selectEstado"
-                                placeholder="Digite para filtrar" onkeyup="filterEstado()" required>
+                                placeholder="Digite para filtrar" onkeyup="filterEstado()">
                             <div id="selectEstadoLista" class="select-items">
                                 <?php filtroEstado($conn); ?>
                             </div>
@@ -126,6 +126,18 @@ if ($seriesSelecionadasAspas) {
                                 placeholder="Digite para filtrar" onkeyup="filterClass()" required>
                             <div id="selectClassLista" class="select-items">
                                 <?php filtroClass($conn); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-input">
+                        <label for="class">Clientes * (Toma lugar do estado se for selecionado)</label>
+                        <div class="custom-select">
+                            <input type="text" name="cliente" class="cliente" id="selectCliente"
+                                placeholder="Digite para filtrar" onkeyup="filterCliente()">
+                            <div id="selectClienteLista" class="select-items">
+                                <?php filtroCliente($conn); ?>
                             </div>
                         </div>
                     </div>

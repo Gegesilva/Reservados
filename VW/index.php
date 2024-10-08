@@ -52,7 +52,7 @@ $serie = $_GET['serie'];
             <h6 class="msg-os"></h6>
             <div class="form-group">
                 <div class="form-input">
-                    <label for="selecionado">Series*</label>
+                    <label for="selecionado">Series *</label>
                     <textarea id="selecionado" name="selecionado" rows="1"
                         required><?= $seriesSelecionadas; ?></textarea>
                 </div>
@@ -60,7 +60,7 @@ $serie = $_GET['serie'];
                     <label for="estado">Estado*</label>
                     <div class="custom-select">
                         <input type="text" name="estado" class="estado" id="selectEstado"
-                            placeholder="Digite para filtrar" onkeyup="filterEstado()" required>
+                            placeholder="Digite para filtrar" onkeyup="filterEstado()" >
                         <div id="selectEstadoLista" class="select-items">
                             <?php filtroEstado($conn); ?>
                         </div>
@@ -113,6 +113,18 @@ $serie = $_GET['serie'];
                             onkeyup="filterClass()" required>
                         <div id="selectClassLista" class="select-items">
                             <?php filtroClass($conn); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-input">
+                    <label for="class">Clientes * (Toma lugar do estado se for selecionado)</label>
+                    <div class="custom-select">
+                        <input type="text" name="cliente" class="cliente" id="selectCliente" placeholder="Digite para filtrar"
+                            onkeyup="filterCliente()">
+                        <div id="selectClienteLista" class="select-items">
+                            <?php filtroCliente($conn); ?>
                         </div>
                     </div>
                 </div>
