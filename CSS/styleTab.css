@@ -1,0 +1,33 @@
+th, td {
+    white-space: nowrap;
+    border-radius: 15px;
+}
+.table-container {
+    overflow-x: auto;
+    overflow-y: auto;
+    /* max-height: 600px;
+    max-width: 100%; */
+    background-color: white;
+    border-radius: 15px;
+    border: 1px solid #000000;
+    width: 100vw; /* 100% da largura da tela */
+    height: 80vh; /* 100% da altura da tela */
+}
+thead th.sticky {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 2;
+}
+thead th.fixed {
+    position: sticky;
+    left: 0;
+    z-index: 3;
+    background-color: white;
+}
+tbody td.fixed {
+    position: sticky;
+    left: 0;
+    background-color: white;
+    z-index: 1;
+}
