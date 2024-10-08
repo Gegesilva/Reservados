@@ -3,7 +3,6 @@ header('Content-type: text/html; charset=ISO-8895-1');
 include_once "../DB/conexaoSQL.php";
 include_once "../DB/filtros.php";
 include_once "../DB/func.php";
-include_once "../Config.php";
 
 validaUsuario($conn);
 
@@ -93,7 +92,6 @@ if ($consumo == 'N') {
                         <th>PRODUTO</th>
                         <th>REFERENCIA</th>
                         <th class="currency">VALOR BASE</th>
-                        <!-- <th>FATOR</th> -->
                         <th class="currency">VALOR IPI</th>
                         <th class="currency">ST</th>
                         <th class="currency">DIFAL ST</th>
@@ -176,7 +174,6 @@ if ($consumo == 'N') {
                                 $tabela .= "<td>" . $row['CODPRODUTO'] . "</td>";
                                 $tabela .= "<td>" . $row['REFERENCIA'] . "</td>";
                                 $tabela .= "<td class='currency'>" . $row['VALORBASE'] . "</td>";
-                                /* $tabela .= "<td>" . $row['FATOR'] . "</td>"; */
                                 $tabela .= "<td class='currency'>" . $row['VALORIPI'] . "</td>";
                                 $tabela .= "<td class='currency'>" . $row['ST'] . "</td>";
                                 $tabela .= "<td class='currency'>" . $row['DIFALST'] . "</td>";

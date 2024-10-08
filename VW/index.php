@@ -2,7 +2,6 @@
 header('Content-type: text/html; charset=ISO-8895-1');
 include_once "../DB/conexaoSQL.php";
 include_once "../DB/filtros.php";
-include_once "../Config.php";
 
 //Pega as series selecionadas
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

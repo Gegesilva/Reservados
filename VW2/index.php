@@ -153,6 +153,7 @@ include_once "../DB/conexaoSQL.php";
 
         </form>
     </div>
+    <button class="btn-sair" onclick="location.href='../login.php'">Sair</button>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

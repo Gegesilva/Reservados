@@ -3,7 +3,6 @@ header('Content-type: text/html; charset=ISO-8895-1');
 include_once "../DB/conexaoSQL.php";
 include_once "../DB/filtros.php";
 include_once "../DB/func.php";
-include_once "../Config.php";
 
 validaUsuario($conn);
 
@@ -13,6 +12,7 @@ $pessoa = $_POST['pessoa'];
 $consumo = $_POST['consumo'];
 $condicao = $_POST['condicao'];
 $tabelaCust = $_POST['tabela'];
+$classificacao = $_POST['class'];
 $cliente = $pessoa . ':' . $estado;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -84,6 +84,7 @@ if ($tipo == '00') {
             </div>
             <div>
                 <span><b>Tipo:</b> <?= $nomeTipo; ?></span>
+                <span><b>Classificação:</b> <?= $classificacao; ?></span>
             </div>
         </div>
     </div>

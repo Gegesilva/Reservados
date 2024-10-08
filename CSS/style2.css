@@ -69,3 +69,16 @@ h2{
     box-sizing: border-box; /* Garante que o padding e border sejam inclusos no tamanho total */
     display: inline-block; /* Garante que o botão se ajuste ao conteúdo */
 }
+
+.btn-sair{
+    border-radius: 20px;
+    background-color: rgb(244, 139, 139);
+    box-shadow: 1px 2px white;
+    float: right;
+    border: none;
+    white-space: nowrap; /* Impede que o texto quebre em várias linhas */
+    overflow: hidden; /* Esconde o texto que ultrapassa os limites do botão */
+    text-overflow: ellipsis; /* Adiciona "..." quando o texto é cortado */
+    box-sizing: border-box; /* Garante que o padding e border sejam inclusos no tamanho total */
+   
+}

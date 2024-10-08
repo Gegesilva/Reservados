@@ -2,7 +2,6 @@
 header('Content-type: text/html; charset=ISO-8895-1');
 include_once "../DB/conexaoSQL.php";
 include_once "../DB/filtros.php";
-include_once "../Config.php";
 /* pega o array recebido no formado de URL e transforma em array comum */
 $serie = unserialize(urldecode($_GET['serie']));
 
