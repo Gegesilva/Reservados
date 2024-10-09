@@ -5,8 +5,6 @@ th, td {
 .table-container {
     overflow-x: auto;
     overflow-y: auto;
-    /* max-height: 600px;
-    max-width: 100%; */
     background-color: white;
     border-radius: 15px;
     border: 1px solid #000000;
@@ -16,18 +14,32 @@ th, td {
 thead th.sticky {
     position: sticky;
     top: 0;
-    background-color: white;
+    background-color: rgb(234, 230, 230);
     z-index: 2;
 }
 thead th.fixed {
     position: sticky;
     left: 0;
     z-index: 3;
-    background-color: white;
+    background-color: rgb(234, 230, 230);
 }
 tbody td.fixed {
     position: sticky;
     left: 0;
+    background-color: white;
+    z-index: 1;
+}
+
+
+thead th.fixed2 {
+    position: sticky;
+    left: 220;
+    z-index: 3;
+    background-color: rgb(234, 230, 230);
+}
+tbody td.fixed2 {
+    position: sticky;
+    left: 220;
     background-color: white;
     z-index: 1;
 }

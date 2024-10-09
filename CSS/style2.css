@@ -82,3 +82,13 @@ h2{
     box-sizing: border-box; /* Garante que o padding e border sejam inclusos no tamanho total */
    
 }
+
+.cabecalho-tab{
+    display: table-column;
+}
+
+.fa{
+    background-color: rgb(242, 212, 156);
+    cursor: pointer;
+    border-radius: 20px;
+}

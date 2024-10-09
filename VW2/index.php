@@ -10,6 +10,7 @@ include_once "../DB/conexaoSQL.php";
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DATABIT</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../CSS/styleTab.css">
     <link rel="stylesheet" href="../CSS/colunasfix.css">
     <link rel="stylesheet" href="../CSS/style2.css">
@@ -46,7 +47,6 @@ include_once "../DB/conexaoSQL.php";
                         ,COLOR
                         ,TOTAL
                         ,FATOR
-                        ,PALLET
                         ,SITUACAO
                         ,ORCAMENTO
                         ,CLIENTE
@@ -65,51 +65,63 @@ include_once "../DB/conexaoSQL.php";
                     <thead>
                         <tr>
                             <!-- Cabeçalhos das Colunas com Filtro -->
-                            <th class="sticky fixed">CONTAINER <input type="text" class="form-control filter"
-                                    data-column="0"></th>
-                            <th class="sticky fixed">DATA CHEGADA<input type="text" class="form-control filter"
-                                    data-column="1"></th>
-                            <th class="sticky fixed">STATUS <input type="text" class="form-control filter"
-                                    data-column="2"></th>
-                            <th class="sticky fixed">MARCA <input type="text" class="form-control filter"
-                                    data-column="3"></th>
-                            <th class="sticky fixed">MODELO <input type="text" class="form-control filter"
-                                    data-column="4"></th>
-                            <th class="sticky fixed">SERIE <input type="text" class="form-control filter"
-                                    data-column="5"></th>
-                            <th class="sticky">PB <input type="text" class="form-control filter" data-column="6"></th>
-                            <th class="sticky">COLOR<input type="text" class="form-control filter" data-column="7"></th>
-                            <th class="sticky">TOTAL<input type="text" class="form-control filter" data-column="8"></th>
-                            <th class="sticky">CUSTOSERIAL<input type="text" class="form-control filter"
-                                    data-column="9"></th>
-                            <th class="sticky">VALOR BASE<input type="text" class="form-control filter"
-                                    data-column="10"></th>
-                            <th class="sticky">FATOR <input type="text" class="form-control filter" data-column="11">
+                            <th class="sticky ">CONTAINER  <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="0"></th>
+                            <th class="sticky ">DATA CHEGADA   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="1"></th>
+                            <th class="sticky ">STATUS <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="2"></th>
+                            <th class="sticky ">MARCA  <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="3"></th>
+                            <th class="sticky fixed fixed-col">MODELO   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="4"></th>
+                            <th class="sticky fixed2 fixed-col fixed-col-2">SERIE   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="5"></th>
+                            <th class="sticky">PB   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="6"></th>
+                            <th class="sticky">COLOR   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="7"></th>
+                            <th class="sticky">TOTAL   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="8"></th>
+                            <th class="sticky">VALOR BASE   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="10"></th>
+                            <th class="sticky">FATOR   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="11">
                             </th>
-                            <th class="sticky">MINIMO<input type="text" class="form-control filter" data-column="12">
+                            <th class="sticky">MINIMO   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="12">
                             </th>
-                            <th class="sticky">BASICO<input type="text" class="form-control filter" data-column="13">
+                            <th class="sticky">BASICO   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="13">
                             </th>
-                            <th class="sticky">ALMEJADO<input type="text" class="form-control filter" data-column="14">
+                            <th class="sticky">ALMEJADO   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="14">
                             </th>
-                            <th class="sticky">PALLET <input type="text" class="form-control filter" data-column="15">
+                            <th class="sticky">PALLET   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="15">
                             </th>
-                            <th class="sticky">SITUAÇÃO<input type="text" class="form-control filter" data-column="16">
+                            <th class="sticky">SITUAÇÃO   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="16">
                             </th>
-                            <th class="sticky">ORCAMENTO<input type="text" class="form-control filter" data-column="17">
+                            <th class="sticky">ORCAMENTO   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="17">
                             </th>
-                            <th class="sticky">CLIENTE<input type="text" class="form-control filter" data-column="18">
+                            <th class="sticky">CLIENTE   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="18">
                             </th>
-                            <th class="sticky">VENDEDOR<input type="text" class="form-control filter" data-column="19">
+                            <th class="sticky">VENDEDOR   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="19">
                             </th>
-                            <th class="sticky">CLASSIFICAÇÃO<input type="text" class="form-control filter"
-                                    data-column="20"></th>
-                            <th class="sticky">OBS PEDIDO<input type="text" class="form-control filter"
-                                    data-column="21"></th>
-                            <th class="sticky">OBS TECNICAS<input type="text" class="form-control filter"
-                                    data-column="22"></th>
-                            <th class="sticky">NOTA<input type="text" class="form-control filter" data-column="23"></th>
-                            <th class="sticky">LOCAL<input type="text" class="form-control filter" data-column="24">
+                            <th class="sticky">CLASSIFICAÇÃO   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="20"></th>
+                            <th class="sticky">OBS PEDIDO   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="21"></th>
+                            <th class="sticky">OBS TECNICAS   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="22"></th>
+                            <th class="sticky">NOTA   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="23"></th>
+                            <th class="sticky">LOCAL   <i class="fa fa-sort" aria-hidden="true"></i><input onclick="clicouNoFilho(event)" type="text"
+                                    class="form-control filter" data-column="24">
                             </th>
                         </tr>
                     </thead>
@@ -118,16 +130,15 @@ include_once "../DB/conexaoSQL.php";
                         $tabela = "";
                         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                             $tabela .= "<tr>";
-                            $tabela .= "<td class='fixed'>" . $row['CONTAINER'] . "</td>";
-                            $tabela .= "<td class='fixed'>" . $row['DATACHEGADA'] . "</td>";
-                            $tabela .= "<td class='fixed'>" . $row['STATUS'] . "</td>";
-                            $tabela .= "<td class='fixed'>" . $row['MARCA'] . "</td>";
-                            $tabela .= "<td class='fixed'>" . $row['MODELO'] . "</td>";
-                            $tabela .= "<td class='fixed'><input id='flagSerie' type='checkbox' name='selecionado[]' value='$row[SERIE]'> " . $row['SERIE'] . "</td>";
+                            $tabela .= "<td class=''>" . $row['CONTAINER'] . "</td>";
+                            $tabela .= "<td class=''>" . $row['DATACHEGADA'] . "</td>";
+                            $tabela .= "<td class=''>" . $row['STATUS'] . "</td>";
+                            $tabela .= "<td class=''>" . $row['MARCA'] . "</td>";
+                            $tabela .= "<td class='sticky fixed fixed-col'>" . $row['MODELO'] . "</td>";
+                            $tabela .= "<td class='sticky fixed2 fixed-col fixed-col-2'><input id='flagSerie' type='checkbox' name='selecionado[]' value='$row[SERIE]'> " . $row['SERIE'] . "</td>";
                             $tabela .= "<td>" . $row['PB'] . "</td>";
                             $tabela .= "<td>" . $row['COLOR'] . "</td>";
                             $tabela .= "<td>" . $row['TOTAL'] . "</td>";
-                            $tabela .= "<td>" . $row['CUSTOSERIAL'] . "</td>";
                             $tabela .= "<td>" . $row['VALORBASE'] . "</td>";
                             $tabela .= "<td>" . $row['FATOR'] . "</td>";
                             $tabela .= "<td>" . $row['MINIMO'] . "</td>";
@@ -159,7 +170,6 @@ include_once "../DB/conexaoSQL.php";
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../JS/filtros.js" charset="utf-8"></script>
-    <script src="../JS/ordenacao.js" charset="utf-8"></script>
 </body>
 
 </html>

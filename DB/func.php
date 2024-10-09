@@ -23,7 +23,7 @@ function validaUsuario($conn)
 
     } else {
        return print "<script>window.alert('É necessário fazer login!')</script>
-                        <script>location.href='login.php'</script>";
+                        <script>location.href='../login.php'</script>";
     }
 
 }

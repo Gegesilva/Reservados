@@ -38,6 +38,9 @@ for (let i = 0; i < items.length; i++) {
 }
 
 
+
+
+
 /* Condicao */
 
 // Mostrar as opções ao focar no campo de texto
@@ -75,6 +78,8 @@ for (let i = 0; i < items2.length; i++) {
     document.getElementById("selectCondicaoLista").style.display = "none";
   });
 }
+
+
 
 
 
@@ -161,6 +166,7 @@ for (let i = 0; i < items4.length; i++) {
 
 
 
+
 /* Clientes */
 
 // Mostrar as opções ao focar no campo de texto
@@ -205,4 +211,3 @@ for (let i = 0; i < items5.length; i++) {
 function voltar() {
   history.back();
 }
-

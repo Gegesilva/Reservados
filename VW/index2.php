@@ -70,7 +70,7 @@ if ($seriesSelecionadasAspas) {
                         </select>
                     </div>
                     <div class="form-input">
-                        <label for="estado">Estado *</label>
+                        <label for="estado">Estado</label>
                         <div class="custom-select">
                             <input type="text" name="estado" class="estado" id="selectEstado"
                                 placeholder="Digite para filtrar" onkeyup="filterEstado()">
@@ -132,7 +132,7 @@ if ($seriesSelecionadasAspas) {
                 </div>
                 <div class="form-group">
                     <div class="form-input">
-                        <label for="class">Clientes * (Toma lugar do estado se for selecionado)</label>
+                        <label for="class">Clientes (Toma lugar do estado se for selecionado)</label>
                         <div class="custom-select">
                             <input type="text" name="cliente" class="cliente" id="selectCliente"
                                 placeholder="Digite para filtrar" onkeyup="filterCliente()">
@@ -145,8 +145,7 @@ if ($seriesSelecionadasAspas) {
                 <div class="btn-index">
                     <input type="hidden" name="trava" id="trava" value="1">
                     <button type="submit" class="submit-btn">Gerar</button>
-                    <!--  <button onClick="window.location='.php';" type="submit"
-                    class="voltar-btn-form">Voltar</button> -->
+                    <a onClick="window.location='../vw2/index.php';" type="" class="voltar-btn-form">Voltar</a>
                 </div>
                 <input type="hidden" id="urlOS" value="<?= $url ?>/save.php">
             </form>

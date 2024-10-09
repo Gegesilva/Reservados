@@ -57,7 +57,7 @@ $serie = $_GET['serie'];
                         required><?= $seriesSelecionadas; ?></textarea>
                 </div>
                 <div class="form-input">
-                    <label for="estado">Estado*</label>
+                    <label for="estado">Estado</label>
                     <div class="custom-select">
                         <input type="text" name="estado" class="estado" id="selectEstado"
                             placeholder="Digite para filtrar" onkeyup="filterEstado()" >
@@ -119,7 +119,7 @@ $serie = $_GET['serie'];
             </div>
             <div class="form-group">
                 <div class="form-input">
-                    <label for="class">Clientes * (Toma lugar do estado se for selecionado)</label>
+                    <label for="class">Clientes (Toma lugar do estado se for selecionado)</label>
                     <div class="custom-select">
                         <input type="text" name="cliente" class="cliente" id="selectCliente" placeholder="Digite para filtrar"
                             onkeyup="filterCliente()">
