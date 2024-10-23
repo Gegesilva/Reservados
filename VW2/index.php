@@ -254,7 +254,7 @@ validaUsuario($conn);
                                                         }elseif($classificacao == '0010' && $CodCliente == '00001843'){
                                                                 $comissaoFixa = $valorVenda * 0.005;
                                                         }else{
-                                                                $comissaoFixa = 0;
+                                                                $comissaoFixa = $valorVenda * 0;
                                                         }
 
                                                         /* Calculo bonus 1 */
