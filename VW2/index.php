@@ -34,39 +34,39 @@ validaUsuario($conn);
                                 <?php
                                 $sql =
                                         "SELECT 
-                        FORMAT(DATACHEGADA, 'dd/MM/yyyy') DATACHEGADA,
-                        FORMAT(VALORBASE, 'C', 'pt-br') VALORBASE,
-                        VALORBASE VALORBASENUM,
-                        FORMAT(CUSTOSERIAL, 'C','pt-br') CUSTOSERIAL,
-                        FORMAT(ALMEJADO, 'C','pt-br') ALMEJADO,
-                        FORMAT(MINIMO, 'C', 'pt-br') MINIMO,
-                        FORMAT(BASICO, 'C', 'pt-br') BASICO,
-                        FORMAT(PALLET, 'C', 'pt-br') PALLET,
-                        CONTAINER,
-                        STATUS,
-                        MARCA,
-                        MODELO,
-                        SERIE,
-                        PB,
-                        COLOR,
-                        TOTAL MedidorTotal,
-                        FATOR,
-                        SITUACAO,
-                        ORCAMENTO,
-                        CLIENTE,
-                        VENDEDOR,
-                        CLASSIFICACAO,
-                        OBSPEDIDO,
-                        OBSTECNICAS,3
-                        NOTA,
-                        LOCAL,
-                        TB01010_QTPREV CONTREF,
-                        CODCLASSIFICACAO,
-                        CODCLIENTE,
-                        CAST(DTCAD AS DATE) DTCAD,
-                        CAST(DATACHEGADA AS DATE) DATACHEGADADATE
-                FROM Equipamentos_Estoque_PHP
-                LEFT JOIN TB01010 ON TB01010_CODIGO = CODPRODUTO";
+                                                FORMAT(DATACHEGADA, 'dd/MM/yyyy') DATACHEGADA,
+                                                FORMAT(VALORBASE, 'C', 'pt-br') VALORBASE,
+                                                VALORBASE VALORBASENUM,
+                                                FORMAT(CUSTOSERIAL, 'C','pt-br') CUSTOSERIAL,
+                                                FORMAT(ALMEJADO, 'C','pt-br') ALMEJADO,
+                                                FORMAT(MINIMO, 'C', 'pt-br') MINIMO,
+                                                FORMAT(BASICO, 'C', 'pt-br') BASICO,
+                                                FORMAT(PALLET, 'C', 'pt-br') PALLET,
+                                                CONTAINER,
+                                                STATUS,
+                                                MARCA,
+                                                MODELO,
+                                                SERIE,
+                                                PB,
+                                                COLOR,
+                                                TOTAL MedidorTotal,
+                                                FATOR,
+                                                SITUACAO,
+                                                ORCAMENTO,
+                                                CLIENTE,
+                                                VENDEDOR,
+                                                CLASSIFICACAO,
+                                                OBSPEDIDO,
+                                                OBSTECNICAS,
+                                                NOTA,
+                                                LOCAL,
+                                                TB01010_QTPREV CONTREF,
+                                                CODCLASSIFICACAO,
+                                                CODCLIENTE,
+                                                CAST(DTCAD AS DATE) DTCAD,
+                                                CAST(DATACHEGADA AS DATE) DATACHEGADADATE
+                                        FROM Equipamentos_Estoque_PHP
+                                        LEFT JOIN TB01010 ON TB01010_CODIGO = CODPRODUTO";
                                 $stmt = sqlsrv_query($conn, $sql);
 
                                 ?>
