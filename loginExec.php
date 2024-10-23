@@ -2,10 +2,10 @@
 session_start();
 include_once "DB/conexaoSQL.php";
 
-$login = $_POST['login'];
+$login = $_POST['username'];
 $senha = $_POST['password'];
 
-$_SESSION["login"]=$login;
+$_SESSION["username"]=$login;
 $_SESSION["password"]=$senha;
 
     $sql="SELECT 

@@ -113,3 +113,5 @@ function filtroCliente($conn)
     }
     return print ($opcao);
 }
+
+

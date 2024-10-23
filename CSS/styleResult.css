@@ -18,6 +18,10 @@ body {
     -ms-overflow-style: none; 
 }
 
+p{
+    color: red;
+}
+
 
 .table{
     width: 100%; /* A tabela ocupa toda a largura da div */
@@ -70,4 +74,7 @@ body {
     width: auto;
 }
 
-
+.obs{
+    display: flex;
+    justify-content: center;
+  }

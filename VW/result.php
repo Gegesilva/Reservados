@@ -1,10 +1,14 @@
 <?php
+session_start();
+
 header('Content-type: text/html; charset=ISO-8895-1');
 include_once "../DB/conexaoSQL.php";
 include_once "../DB/filtros.php";
 include_once "../DB/func.php";
 
 validaUsuario($conn);
+
+$Vendedor = validaUsuario($conn);
 
 /* $serie = $_POST['serie']; */
 $estado = $_POST['estado'];
@@ -21,7 +25,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     /* print_r($series); */ // Exibe o array
 }
 
-/* Pega o codigo da cindição pelo nome passado pelo input da lista */
+$serieEnvio = urlencode(serialize($series));
+
+/* Pega o codigo da condição pelo nome passado pelo input da lista */
 $sql = "SELECT TB01014_CODIGO Cod 
         FROM TB01014
         WHERE TB01014_NOME = '$condicao'";
@@ -54,10 +60,25 @@ while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
     $CodCliente = $row['Cod'];
 }
 
+/* Pega codigo de classificação */
+$sql = "SELECT 
+            TB01068_CODIGO Cod,
+            TB01068_NOME Class
+        FROM TB01068
+        WHERE TB01068_SITUACAO = 'A'
+        AND TB01068_NOME = '$classificacao'";
+
+$stmt = sqlsrv_query($conn, $sql);
+
+while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+    $codClass = $row['Cod'];
+}
+
+
 /* Testa para ver oq foi preenchido no form Cliente/estado */
-if($clienteForm){
+if ($clienteForm) {
     $definiCli = $CodCliente;
-}else{
+} else {
     $definiCli = $cliente;
 }
 
@@ -67,6 +88,18 @@ if ($consumo == 'N') {
 } else {
     $nomeConsumo = 'Consumo';
 }
+
+/* evita que a função de log seja executada ao atualizar a pagina */
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == false) {
+    $rodarlog = true;
+    $_SESSION['funcao_executada'] = true;
+    /* Gerar contador */
+    $contador = contador($conn);
+    $_SESSION['mostra_contador'] = contador($conn);
+} else {
+    $rodarlog = false;
+}
+
 
 ?>
 
@@ -88,16 +121,20 @@ if ($consumo == 'N') {
         <img class="logo" src="../img/logo.jpg" alt="logo">
         <div class="info-bloco">
             <div>
-                <span><b><?= $clienteForm ? "Cliente: " : "Estado: " ?></b> <?= $clienteForm ? $clienteForm : $estado; ?></span>
+                <span><b><?= $clienteForm ? "Cliente: " : "Estado: " ?></b>
+                    <?= $clienteForm ? $clienteForm : $estado; ?></span>
                 <span><b>Pessoa: </b> <?= $cliente; ?></span>
             </div>
             <div>
                 <span><b>Tipo Consumo: </b> <?= $nomeConsumo; ?></span>
-                <span><b>Condição: </b> <?= $condicao; ?></span>
+                <span><b>Condição: </b> <?= $condicao . ' - ' . $tabelaCustCod ?></span>
             </div>
             <div>
-                <span><b>Tabela: </b> <?= $tabelaCust; ?></span>
+                <span><b>Vendedor: </b> <?= $Vendedor; ?></span>
                 <span><b>Classificação: </b> <?= $classificacao; ?></span>
+            </div>
+            <div>
+                <span><b>Cotação: </b> <?= $_SESSION['mostra_contador']; ?></span>
             </div>
         </div>
     </div>
@@ -111,20 +148,18 @@ if ($consumo == 'N') {
                     <tr>
                         <th>PRODUTO</th>
                         <th>REFERENCIA</th>
-                        <th class="currency">VALOR BASE</th>
-                        <th class="currency">VALOR IPI</th>
-                        <th class="currency">ST</th>
-                        <th class="currency">DIFAL ST</th>
-                        <th class="currency">VALOR FINAL</th>
+                        <th class="currency">PREVISÃO CHEGADA</th>
+                        <th class="currency">STATUS</th>
                         <th>MEDIDOR PB</th>
                         <th>MEDIDOR COLOR</th>
                         <th>MEDIDOR TOTAL</th>
+                        <th class="currency">VALOR FINAL</th>
                     </tr>
                     </tr>
                 </thead>
                 <?php
-                /* if ($_SERVER['REQUEST_METHOD'] === 'POST') { */
-                // Verifica se alguma célula foi selecionada
+
+
                 if (isset($series) && is_array($series)) {
                     // Recupera os valores das células selecionadas
                     $selecionados = $series;
@@ -165,6 +200,7 @@ if ($consumo == 'N') {
                                         
                                         
                                         @PRODUTO AS CODPRODUTO,
+                                        @SERIAL AS SERIE,
                                         TB01010_REFERENCIA AS REFERENCIA,
                                         TB01010_NOME AS NOME,
                                         FORMAT(VALOR, 'C', 'pt-br') AS VALORBASE,
@@ -173,14 +209,26 @@ if ($consumo == 'N') {
                                         FORMAT(VALORST, 'C', 'pt-br') AS ST,
                                         FORMAT(DIFALIQ, 'C', 'pt-br') AS DIFALST,
                                         FORMAT(VALORFINAL, 'C', 'pt-br') AS VALORFINAL,
+                                        VALORFINAL AS VALORFINALNUM,
                                         TB02054_MEDIDORPB MEDIDORPB,
                                         TB02054_MEDIDORCOLOR MEDIDORCOLOR,
                                         TB02054_MEDIDORTOTAL MEDIDORTOTAL,
-                                        TB02054_PONTUACAO PONTUACAO
+                                        TB02054_PONTUACAO PONTUACAO,
+                                        CASE
+                                        WHEN 
+                                            DATACHEGADA > GETDATE()
+                                        THEN 
+                                            FORMAT(DATACHEGADA, 'dd/MM/yyyy') 
+                                        ELSE 
+                                            'N/A' 
+                                        END PREVISAOCHEGADA,
+                                        CODSTATUS,
+                                        STATUS
                                         
                                         from FT02002(@EMPRESA,@PRODUTO,@OPERACAO,@CONDICAO,@CLIENTE,@VENDACONS,@TABELA,@VALORBASE)
                                         LEFT JOIN TB01010 ON TB01010_CODIGO = @PRODUTO
                                         LEFT JOIN TB02054 ON TB02054_PRODUTO = @PRODUTO AND TB02054_CODEMP = @EMPRESA AND TB02054_NUMSERIE = @SERIAL
+                                        LEFT JOIN Equipamentos_Estoque_PHP ON SERIE = @SERIAL
                                     ";
                         $stmt = sqlsrv_query($conn, $sql);
 
@@ -189,47 +237,73 @@ if ($consumo == 'N') {
                         <tbody>
 
                             <?php
+
                             $tabela = "";
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                $tabela .= "<td>" . $row['CODPRODUTO'] . "</td>";
+                                /* Preenche código vazio */
+                                $CodProd = isset($row['CODPRODUTO']) ? $row['CODPRODUTO'] : 'INDISPONÍVEL';
+
+                                $tabela .= "<tr>";
+                                $tabela .= "<td>" . $CodProd . "</td>";
                                 $tabela .= "<td>" . $row['REFERENCIA'] . "</td>";
-                                $tabela .= "<td class='currency'>" . $row['VALORBASE'] . "</td>";
-                                $tabela .= "<td class='currency'>" . $row['VALORIPI'] . "</td>";
-                                $tabela .= "<td class='currency'>" . $row['ST'] . "</td>";
-                                $tabela .= "<td class='currency'>" . $row['DIFALST'] . "</td>";
-                                $tabela .= "<td class='currency'>" . $row['VALORFINAL'] . "</td>";
+                                $tabela .= "<td class='currency'>" . $row['PREVISAOCHEGADA'] . "</td>";
+                                $tabela .= "<td class='currency'>" . $row['STATUS'] . "</td>";
                                 $tabela .= "<td>" . $row['MEDIDORPB'] . "</td>";
                                 $tabela .= "<td>" . $row['MEDIDORCOLOR'] . "</td>";
                                 $tabela .= "<td>" . $row['MEDIDORTOTAL'] . "</td>";
+                                $tabela .= "<td class='currency'>" . $row['VALORFINAL'] . "</td>";
                                 $tabela .= "</tr>";
+                                /* impede que seja salvo log ao atualizar a página */
+                                if ($rodarlog == true) {
+                                    insereLog(
+                                        $conn,
+                                        $contador,
+                                        $row['SERIE'],
+                                        $definiCli,
+                                        $consumo,
+                                        $Vendedor,
+                                        $pessoa,
+                                        $codCond,
+                                        $codClass,
+                                        $CodProd,
+                                        $row['REFERENCIA'],
+                                        $row['CODSTATUS'],
+                                        $row['MEDIDORPB'],
+                                        $row['MEDIDORCOLOR'],
+                                        $row['MEDIDORTOTAL'],
+                                        $row['VALORFINALNUM'],
+                                        $tabelaCustCod
+                                    );
+                                }
                             }
-                            /* $tabela .= "</table>"; */
 
                             print ($tabela);
                     }
                 }
-                /* } */
 
                 ?>
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th colspan="1">Total</th>
+                        <th colspan="6">Total</th>
                         <th></th>
-                        <th id="totalValorBase" class="currency">R$ 0,00</th>
-                        <th id="totalValorIPI" class="currency">R$ 0,00</th>
-                        <th id="totalST" class="currency">R$ 0,00</th>
-                        <th id="totalDifalST" class="currency">R$ 0,00</th>
                         <th id="totalValorFinal" class="currency">R$ 0,00</th>
-                        <th colspan="4"></th>
                     </tr>
                 </tfoot>
             </table>
         </div>
     </div>
+    <div class="obs">
+        <P><b>OBS: </b> VALIDADE DA COTACÃO - 3 DIAS</P>
+        &nbsp;<p> - ESSA COTACÃO NÃO RESERVA AS SÉRIES CONTIDAS NO MESMO.</p>
+    </div>
     <div class="btn-index">
         <input type="hidden" name="trava" id="trava" value="1">
-        <button onClick="voltar();" type="submit" class="voltar-btn-form">Voltar</button>
+        <!-- <button type="submit" class="voltar-btn-form">Voltar</button>
+            <input name="selecionado[]" type="hidden" value="<?= $selecionados ?>"> -->
+
+        <button class="voltar-btn-form" onClick="window.location='index.php?serie=<?= $serieEnvio; ?>';" type="submit"
+            class="voltar-btn-form">Voltar</button>
     </div>
     <input type="hidden" id="urlOS" value="<?= $url ?>/save.php">
 

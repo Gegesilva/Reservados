@@ -19,8 +19,8 @@
 
         <!-- Login Form -->
         <form action="loginexec.php" method="post">
-          <input type="text" id="login" class="fadeIn second" name="login" placeholder="Usuario">
-          <input type="password" id="password" class="fadeIn third" name="password" placeholder="Senha">
+          <input type="text" id="username" class="fadeIn second" name="username" placeholder="Usuario" autocomplete="username">
+          <input type="password" id="password" class="fadeIn third" name="password" placeholder="Senha" autocomplete="current-password">
           <input type="submit" class="fadeIn fourth" value="Entrar">
         </form>
 

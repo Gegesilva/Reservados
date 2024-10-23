@@ -18,17 +18,17 @@ function calculateTotals() {
         totalValorFinal = 0;
 
     document.querySelectorAll('tbody tr').forEach(row => {
-        totalValorBase += parseCurrency(row.cells[2].textContent);
+        /* totalValorBase += parseCurrency(row.cells[2].textContent);
         totalValorIPI += parseCurrency(row.cells[3].textContent);
         totalST += parseCurrency(row.cells[4].textContent);
-        totalDifalST += parseCurrency(row.cells[5].textContent);
-        totalValorFinal += parseCurrency(row.cells[6].textContent);
+        totalDifalST += parseCurrency(row.cells[5].textContent); */
+        totalValorFinal += parseCurrency(row.cells[7].textContent);
     });
 
-    document.getElementById('totalValorBase').textContent = formatToCurrency(totalValorBase);
+    /* document.getElementById('totalValorBase').textContent = formatToCurrency(totalValorBase);
     document.getElementById('totalValorIPI').textContent = formatToCurrency(totalValorIPI);
     document.getElementById('totalST').textContent = formatToCurrency(totalST);
-    document.getElementById('totalDifalST').textContent = formatToCurrency(totalDifalST);
+    document.getElementById('totalDifalST').textContent = formatToCurrency(totalDifalST); */
     document.getElementById('totalValorFinal').textContent = formatToCurrency(totalValorFinal);
 }
 

@@ -1,7 +1,11 @@
 <?php
 header('Content-type: text/html; charset=ISO-8895-1');
+session_start();
 include_once "../DB/conexaoSQL.php";
 include_once "../DB/filtros.php";
+
+/* atualiza variavel para que o log seja gerado em result.php */
+$_SESSION['funcao_executada'] = false;
 
 //Pega as series selecionadas
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -14,11 +18,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $seriesSelecionadas = implode(",", array_map('htmlspecialchars', $selecionados));
     }
 }
-
+/* Coverte o que enviado na URL */
 $serieEnvio = urlencode(serialize($selecionados));
 
-$serie = $_GET['serie'];
+/* $serie = $_GET['serie']; */
 
+/* pega o array recebido no formado de URL e transforma em array comum */
+$serie = unserialize(urldecode($_GET['serie']));
+
+if ($serie) {
+    /* coloca os itens do array saparados por virgula */
+    $seriesSelecionadas = implode(",", array_map('htmlspecialchars', $serie));
+    /* coloca os itens ds array entre aspas simples e separa por virgula */
+    $seriesSelecionadasAspas = "'" . implode("', '", array_map('htmlspecialchars', $serie)) . "'";
+}
 
 ?>
 
@@ -42,10 +55,10 @@ $serie = $_GET['serie'];
         </div>
         <h1 class="titulos"></h1>
         <div class="buttons-forms">
-            <button class="btn-req" id="btn-req" style="color: black; opacity: 0.4;"
+            <!-- <button class="btn-req" id="btn-req" style="color: black; opacity: 0.4;"
                 onClick="window.location='index.php';" type="submit" class="voltar-btn-form">Equipamentos</button>
-            <button class="btn-req" id="btn-req-sup" onClick="window.location='index2.php?serie=<?= $serieEnvio; ?>';"
-                type="submit" class="voltar-btn-form">suprimentos</button>
+            <button class="btn-req" id="btn-req-sup" onClick="window.location='index2.php?serie=<? $serieEnvio; ?>';"
+                type="submit" class="voltar-btn-form">suprimentos</button> -->
         </div>
         <form method="POST" action="result.php">
 
@@ -60,7 +73,7 @@ $serie = $_GET['serie'];
                     <label for="estado">Estado</label>
                     <div class="custom-select">
                         <input type="text" name="estado" class="estado" id="selectEstado"
-                            placeholder="Digite para filtrar" onkeyup="filterEstado()" >
+                            placeholder="Digite para filtrar" onkeyup="filterEstado()">
                         <div id="selectEstadoLista" class="select-items">
                             <?php filtroEstado($conn); ?>
                         </div>
@@ -121,8 +134,8 @@ $serie = $_GET['serie'];
                 <div class="form-input">
                     <label for="class">Clientes (Toma lugar do estado se for selecionado)</label>
                     <div class="custom-select">
-                        <input type="text" name="cliente" class="cliente" id="selectCliente" placeholder="Digite para filtrar"
-                            onkeyup="filterCliente()">
+                        <input type="text" name="cliente" class="cliente" id="selectCliente"
+                            placeholder="Digite para filtrar" onkeyup="filterCliente()">
                         <div id="selectClienteLista" class="select-items">
                             <?php filtroCliente($conn); ?>
                         </div>
@@ -142,7 +155,6 @@ $serie = $_GET['serie'];
         //echo 'A'.sprintf("%'.05d\n",  mt_rand(0, 0xF00));
         ?>
     </div>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="../JS/script.js" charset="utf-8"></script>
 </body>
