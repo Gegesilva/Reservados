@@ -259,7 +259,7 @@ validaUsuario($conn);
 
                                                         /* Calculo bonus 1 */
                                                         if($dtCad2018 > $dataChegada){
-                                                                $bonus1 = $comissaoVariavel + ($comissaoVariavel * 0.2);
+                                                                $bonus1 = /* $comissaoVariavel + */ ($comissaoVariavel * 0.2);
                                                         }
 
                                                         /* Calculo bonus 2 */
@@ -281,7 +281,7 @@ validaUsuario($conn);
                                                                         break;
                                                         }
 
-                                                        $bonus2 = $comissaoVariavel + ($comissaoVariavel * $percentPont);
+                                                        $bonus2 = /* $comissaoVariavel + */ ($comissaoVariavel * $percentPont);
 
                                                         $tabela .= "<tr>";
                                                         $tabela .= "<td class=''>" . $row['CONTAINER'] . "</td>";
