@@ -148,7 +148,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                     <tr>
                         <th>PRODUTO</th>
                         <th>REFERENCIA</th>
-                        <th class="currency">PREVISÃO CHEGADA</th>
+                        <th>SÉRIE</th>
+                        <!-- <th class="currency">PREVISÃO CHEGADA</th> -->
                         <th class="currency">STATUS</th>
                         <th>MEDIDOR PB</th>
                         <th>MEDIDOR COLOR</th>
@@ -246,7 +247,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                                 $tabela .= "<tr>";
                                 $tabela .= "<td>" . $CodProd . "</td>";
                                 $tabela .= "<td>" . $row['REFERENCIA'] . "</td>";
-                                $tabela .= "<td class='currency'>" . $row['PREVISAOCHEGADA'] . "</td>";
+                                $tabela .= "<td>" . $row['SERIE'] . "</td>";
+                                /* $tabela .= "<td class='currency'>" . $row['PREVISAOCHEGADA'] . "</td>"; */
                                 $tabela .= "<td class='currency'>" . $row['STATUS'] . "</td>";
                                 $tabela .= "<td>" . $row['MEDIDORPB'] . "</td>";
                                 $tabela .= "<td>" . $row['MEDIDORCOLOR'] . "</td>";
@@ -294,7 +296,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
         </div>
     </div>
     <div class="obs">
-        <P><b>OBS: </b> VALIDADE DA COTACÃO - 3 DIAS</P>
+        <P><b>OBS: </b> VALIDADE DA COTACÃO - 1 DIA</P>
         &nbsp;<p> - ESSA COTACÃO NÃO RESERVA AS SÉRIES CONTIDAS NO MESMO.</p>
     </div>
     <div class="btn-index">

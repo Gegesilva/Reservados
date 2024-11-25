@@ -70,19 +70,6 @@ h2{
     display: inline-block; /* Garante que o botão se ajuste ao conteúdo */
 }
 
-.btn-sair{
-    border-radius: 20px;
-    background-color: rgb(244, 139, 139);
-    box-shadow: 1px 2px white;
-    float: right;
-    border: none;
-    white-space: nowrap; /* Impede que o texto quebre em várias linhas */
-    overflow: hidden; /* Esconde o texto que ultrapassa os limites do botão */
-    text-overflow: ellipsis; /* Adiciona "..." quando o texto é cortado */
-    box-sizing: border-box; /* Garante que o padding e border sejam inclusos no tamanho total */
-   
-}
-
 .cabecalho-tab{
     display: table-column;
 }
@@ -92,3 +79,41 @@ h2{
     cursor: pointer;
     border-radius: 20px;
 }
+
+.acoes-rodape {
+    display: flex;
+    justify-content: space-between; /* Garante que os itens fiquem nas extremidades */
+    align-items: center; /* Alinha verticalmente */
+    width: 100%;
+    padding: 10px; /* Opcional, para espaçamento interno */
+  }
+  
+  .input-rodape,
+  .btn-rodape {
+    display: inline-block; /* Mantém os dois elementos agrupados */
+    border-radius: 20px;
+    border: none;
+    box-shadow: 1px 2px white;
+    background-color: rgb(166, 241, 134);
+  }
+  
+  .input-rodape {
+    margin-right: 10px; /* Espaçamento entre o input e o botão */
+  }
+  
+  .btn-sair {
+    margin-left: auto; /* Empurra o botão 'Sair' para a direita */
+    border-radius: 20px;
+    background-color: rgb(244, 139, 139);
+    box-shadow: 1px 2px white;
+    border: none; 
+    white-space: nowrap; /* Impede que o texto quebre em várias linhas */
+    overflow: hidden; /* Esconde o texto que ultrapassa os limites do botão */
+    text-overflow: ellipsis; /* Adiciona "..." quando o texto é cortado */
+    box-sizing: border-box; /* Garante que o padding e border sejam inclusos no tamanho total */
+  }
+  
+  .input-rodape::placeholder {
+    text-align: center; /* Garante que o texto do placeholder siga o alinhamento */
+    color: gray; /* Opcional: altera a cor do placeholder */
+  }

@@ -245,25 +245,25 @@ validaUsuario($conn);
                                                                 $comissaoFixa = $valorVenda * 0.004;
                                                         } elseif ($classificacao == '0002') {
                                                                 $comissaoFixa = $valorVenda * 0.01;
-                                                        }elseif($classificacao == '0010' && $CodCliente != '00001843'){
+                                                        } elseif ($classificacao == '0010' && $CodCliente != '00001843') {
                                                                 $comissaoFixa = $valorVenda * 0.0025;
-                                                        }elseif($classificacao == '0006'){
+                                                        } elseif ($classificacao == '0006') {
                                                                 $comissaoFixa = $valorVenda * 0.03;
-                                                        }elseif($classificacao == '0014'){
+                                                        } elseif ($classificacao == '0014') {
                                                                 $comissaoFixa = $valorVenda * 0.0025;
-                                                        }elseif($classificacao == '0010' && $CodCliente == '00001843'){
+                                                        } elseif ($classificacao == '0010' && $CodCliente == '00001843') {
                                                                 $comissaoFixa = $valorVenda * 0.005;
-                                                        }else{
+                                                        } else {
                                                                 $comissaoFixa = $valorVenda * 0;
                                                         }
 
                                                         /* Calculo bonus 1 */
-                                                        if($dtCad2018 > $dataChegada){
+                                                        if ($dtCad2018 > $dataChegada) {
                                                                 $bonus1 = /* $comissaoVariavel + */ ($comissaoVariavel * 0.2);
                                                         }
 
                                                         /* Calculo bonus 2 */
-                                                        switch ($pontuacao){
+                                                        switch ($pontuacao) {
                                                                 case 1:
                                                                         $percentPont = 1;
                                                                         break;
@@ -283,13 +283,23 @@ validaUsuario($conn);
 
                                                         $bonus2 = /* $comissaoVariavel + */ ($comissaoVariavel * $percentPont);
 
+                                                        /* Verifica se a serie esta na situação disponivel, se sim habilita a flag */
+
+                                                        $situacao = $row['SITUACAO'];
+                                                        $inputRadio = "";
+                                                        if ($situacao == 'DISPONIVEL') {
+                                                                $inputRadio = "<input id='flagSerie' type='checkbox' name='selecionado[]' value='$row[SERIE]'>";
+                                                        } else {
+                                                                $inputRadio = "";
+                                                        }
+
                                                         $tabela .= "<tr>";
                                                         $tabela .= "<td class=''>" . $row['CONTAINER'] . "</td>";
                                                         $tabela .= "<td class=''>" . $row['DATACHEGADA'] . "</td>";
                                                         $tabela .= "<td class=''>" . $row['STATUS'] . "</td>";
                                                         $tabela .= "<td class=''>" . $row['MARCA'] . "</td>";
                                                         $tabela .= "<td class='sticky fixed fixed-col'>" . $row['MODELO'] . "</td>";
-                                                        $tabela .= "<td class='sticky fixed2 fixed-col fixed-col-2'><input id='flagSerie' type='checkbox' name='selecionado[]' value='$row[SERIE]'> " . $row['SERIE'] . "</td>";
+                                                        $tabela .= "<td class='sticky fixed2 fixed-col fixed-col-2'>$inputRadio " . $row['SERIE'] . "</td>";
                                                         $tabela .= "<td>" . $row['PB'] . "</td>";
                                                         $tabela .= "<td>" . $row['COLOR'] . "</td>";
                                                         $tabela .= "<td>" . $row['MedidorTotal'] . "</td>";
@@ -322,7 +332,13 @@ validaUsuario($conn);
 
                 </form>
         </div>
-        <button class="btn-sair" onclick="location.href='../login.php'">Sair</button>
+        <div class="acoes-rodape">
+                <form action="../VW/cotacaoRec.php" method="POST">
+                        <input class="input-rodape" name="codCotacao" type="text" placeholder="Recuperar Cotação">
+                        <button class="btn-rodape">Gerar</button>
+                </form>
+                <button class="btn-sair" onclick="location.href='../login.php'">Sair</button>
+        </div>
         </div>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
