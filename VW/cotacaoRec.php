@@ -29,6 +29,8 @@ $sql = "SELECT TOP 1 [CODIGO]
             ,[NUMSERIE]
             ,[DATA]
             ,[TABELA]
+            ,[OBS]
+            ,[VLREMBALAGEM]
         FROM [dbo].[GS_COTACOES]
         WHERE CODIGO = '$codCotacao'
             ";
@@ -39,6 +41,8 @@ while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
     $cliente = strval($row['CLIENTE']);
     $pessoa = $row['PESSOA'];
     $classificacao = $row['CLASSIFICACAO'];
+    $obs = $row['OBS'];
+    $embalagem = $row['VLREMBALAGEM'];
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -240,6 +244,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                         <th></th>
                         <th id="totalValorFinal" class="currency">R$ 0,00</th>
                     </tr>
+                    <tr>
+                        <th colspan="6">Vlr Embalagem</th>
+                        <th></th>
+                        <th class="currency" id="ValorEmbalagem"><?=$embalagem?></th>
+                    </tr>
                 </tfoot>
             </table>
         </div>
@@ -247,6 +256,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
     <div class="obs">
         <P><b>OBS: </b> VALIDADE DA COTACÃO - 1 DIA</P>
         &nbsp;<p> - ESSA COTACÃO NÃO RESERVA AS SÉRIES CONTIDAS NO MESMO. <?=$tabelaCust?></p>
+    </div>
+    <div class="obs-ins">
+        <P><?=$obs?></p>
     </div>
     <div class="btn-index">
         <input type="hidden" name="trava" id="trava" value="1">
