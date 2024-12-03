@@ -16,6 +16,7 @@ function calculateTotals() {
         totalST = 0,
         totalDifalST = 0,
         totalValorFinal = 0;
+        
 
     document.querySelectorAll('tbody tr').forEach(row => {
         /* totalValorBase += parseCurrency(row.cells[2].textContent);
@@ -25,11 +26,17 @@ function calculateTotals() {
         totalValorFinal += parseCurrency(row.cells[7].textContent);
     });
 
+    thEmbalagem = document.getElementById('ValorEmbalagem');
+    embalagem = thEmbalagem.textContent;
+    
     /* document.getElementById('totalValorBase').textContent = formatToCurrency(totalValorBase);
     document.getElementById('totalValorIPI').textContent = formatToCurrency(totalValorIPI);
     document.getElementById('totalST').textContent = formatToCurrency(totalST);
     document.getElementById('totalDifalST').textContent = formatToCurrency(totalDifalST); */
     document.getElementById('totalValorFinal').textContent = formatToCurrency(totalValorFinal);
+    document.getElementById('ValorEmbalagem').textContent = formatToCurrency(embalagem);
+
+    
 }
 
 // Calcular totais ao carregar a página

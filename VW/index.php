@@ -129,6 +129,12 @@ if ($serie) {
                         </div>
                     </div>
                 </div>
+                <div class="form-input">
+                    <label for="class">Embalagem *</label>
+                    <div class="custom-select">
+                        <input type="number" step="0.01" name="embalagem" class="class" id="embalagemClass" required>
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <div class="form-input">
@@ -139,6 +145,14 @@ if ($serie) {
                         <div id="selectClienteLista" class="select-items">
                             <?php filtroCliente($conn); ?>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-input">
+                    <label for="class">Observações</label>
+                    <div class="custom-select">
+                        <textarea type="text" name="obs" class="cliente" id="selectObs"></textarea>
                     </div>
                 </div>
             </div>

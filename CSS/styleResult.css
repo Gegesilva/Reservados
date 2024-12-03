@@ -18,9 +18,7 @@ body {
     -ms-overflow-style: none; 
 }
 
-p{
-    color: red;
-}
+
 
 
 .table{
@@ -77,4 +75,20 @@ p{
 .obs{
     display: flex;
     justify-content: center;
+    color: red;
   }
+
+  .obs-ins{
+    display: flex;
+    justify-content: center;
+    color: black;
+  }
+
+.titulo{
+    justify-content: center;
+    display: flex;
+    margin-bottom: 10px;
+    font-family: serif;
+    text-decoration: underline;
+    color: grey;
+}

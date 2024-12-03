@@ -19,6 +19,8 @@ $tabelaCust = $_POST['tabela'];
 $classificacao = $_POST['class'];
 $clienteForm = $_POST['cliente'];
 $cliente = $pessoa . ':' . $estado;
+$obs = $_POST['obs'];
+$embalagem = $_POST['embalagem'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $series = explode(',', $_POST['selecionado']); // Converte a string em array
@@ -99,8 +101,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
 } else {
     $rodarlog = false;
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -118,6 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
 
 <body>
     <div class="cabecalho-result">
+    <H3 class="titulo">COTAÇÃO</H3>
         <img class="logo" src="../img/logo.jpg" alt="logo">
         <div class="info-bloco">
             <div>
@@ -126,8 +127,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                 <span><b>Pessoa: </b> <?= $cliente; ?></span>
             </div>
             <div>
-                <span><b>Tipo Consumo: </b> <?= $nomeConsumo; ?></span>
-                <span><b>Condição: </b> <?= $condicao . ' - ' . $tabelaCustCod ?></span>
+                <span><b>Aplicação: </b> <?= $nomeConsumo; ?></span>
+                <span><b>Condição: </b> <?= $condicao ?></span>
             </div>
             <div>
                 <span><b>Vendedor: </b> <?= $Vendedor; ?></span>
@@ -274,7 +275,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                                         $row['MEDIDORCOLOR'],
                                         $row['MEDIDORTOTAL'],
                                         $row['VALORFINALNUM'],
-                                        $tabelaCustCod
+                                        $tabelaCustCod,
+                                        $obs,
+                                        $embalagem
                                     );
                                 }
                             }
@@ -282,7 +285,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                             print ($tabela);
                     }
                 }
-
+                echo $embalagem;
                 ?>
                 </tbody>
                 <tfoot>
@@ -291,13 +294,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                         <th></th>
                         <th id="totalValorFinal" class="currency">R$ 0,00</th>
                     </tr>
+                    <tr>
+                        <th colspan="6">Vlr Embalagem</th>
+                        <th></th>
+                        <th class="currency" id="ValorEmbalagem"><?=$embalagem?></th>
+                    </tr>
                 </tfoot>
             </table>
         </div>
     </div>
     <div class="obs">
         <P><b>OBS: </b> VALIDADE DA COTACÃO - 1 DIA</P>
-        &nbsp;<p> - ESSA COTACÃO NÃO RESERVA AS SÉRIES CONTIDAS NO MESMO.</p>
+        &nbsp;<p> - ESSA COTACÃO NÃO RESERVA AS SÉRIES CONTIDAS NO MESMO. <?=$tabelaCustCod?></p>
+    </div>
+    <div class="obs-ins">
+        <P><?=$obs?></p>
     </div>
     <div class="btn-index">
         <input type="hidden" name="trava" id="trava" value="1">

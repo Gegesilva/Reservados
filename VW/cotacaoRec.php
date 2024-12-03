@@ -139,6 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
 </head>
 <body>
     <div class="cabecalho-result">
+    <H3 class="titulo">COTAÇÃO</H3>
         <img class="logo" src="../img/logo.jpg" alt="logo">
         <div class="info-bloco">
             <div>
@@ -147,8 +148,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                 <span><b>Pessoa: </b> <?= $pessoa; ?></span>
             </div>
             <div>
-                <span><b>Tipo Consumo: </b> <?= $nomeConsumo; ?></span>
-                <span><b>Condição: </b> <?= $NomeCond . ' - ' . $tabelaCust ?></span>
+                <span><b>Aplicação: </b> <?= $nomeConsumo; ?></span>
+                <span><b>Condição: </b> <?= $NomeCond ?></span>
             </div>
             <div>
                 <span><b>Vendedor: </b> <?= $Vendedor; ?></span>
@@ -211,11 +212,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                         $stmt = sqlsrv_query($conn, $sql);
 
                         ?>
-
                         <tbody>
-
                             <?php
-
                             $tabela = "";
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                 $tabela .= "<tr>";
@@ -234,7 +232,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                             print ($tabela);
                     }
                 }
-
                 ?>
                 </tbody>
                 <tfoot>
@@ -249,7 +246,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
     </div>
     <div class="obs">
         <P><b>OBS: </b> VALIDADE DA COTACÃO - 1 DIA</P>
-        &nbsp;<p> - ESSA COTACÃO NÃO RESERVA AS SÉRIES CONTIDAS NO MESMO.</p>
+        &nbsp;<p> - ESSA COTACÃO NÃO RESERVA AS SÉRIES CONTIDAS NO MESMO. <?=$tabelaCust?></p>
     </div>
     <div class="btn-index">
         <input type="hidden" name="trava" id="trava" value="1">
