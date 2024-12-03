@@ -117,3 +117,17 @@ h2{
     text-align: center; /* Garante que o texto do placeholder siga o alinhamento */
     color: gray; /* Opcional: altera a cor do placeholder */
   }
+
+  .dropdown {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ddd;
+    width: calc(100% - 10px); /* Ajuste de largura para não cortar */
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10000; /* Garantir que a lista fique na frente de tudo */
+    padding: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 5px; /* Distância entre o input e a lista */
+  }
