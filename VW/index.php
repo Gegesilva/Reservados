@@ -3,6 +3,7 @@ header('Content-type: text/html; charset=ISO-8895-1');
 session_start();
 include_once "../DB/conexaoSQL.php";
 include_once "../DB/filtros.php";
+ini_set('max_input_vars', 3000);
 
 /* atualiza variavel para que o log seja gerado em result.php */
 $_SESSION['funcao_executada'] = false;
@@ -33,6 +34,18 @@ if ($serie) {
     $seriesSelecionadasAspas = "'" . implode("', '", array_map('htmlspecialchars', $serie)) . "'";
 }
 
+
+//Pega as series selecionadas
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Verifica se alguma célula foi selecionada
+    if (isset($_POST['vlrembalagem']) && is_array($_POST['vlrembalagem'])) {
+        // Recupera os valores das células selecionadas
+        $vlrembalagem = array_sum($_POST['vlrembalagem']);
+
+        // Coloca os valores dentro de aspas simples e os separa por vírgula
+        /* $vlrembalagemInseridos = implode(",", $vlrembalagem); */
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -132,7 +145,7 @@ if ($serie) {
                 <div class="form-input">
                     <label for="class">Embalagem *</label>
                     <div class="custom-select">
-                        <input type="number" step="0.01" name="embalagem" class="class" id="embalagemClass" required>
+                        <input type="number" step="0.01" name="embalagem" class="class" id="embalagemClass" value="<?=$vlrembalagem?>" required>
                     </div>
                 </div>
             </div>

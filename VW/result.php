@@ -285,7 +285,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                             print ($tabela);
                     }
                 }
-                echo $embalagem;
                 ?>
                 </tbody>
                 <tfoot>

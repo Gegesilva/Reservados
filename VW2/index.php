@@ -3,6 +3,7 @@ header('Content-type: text/html; charset=ISO-8895-1');
 include_once "../DB/conexaoSQL.php";
 include_once "../DB/func.php";
 validaUsuario($conn);
+ini_set('max_input_vars', 3000);
 
 ?>
 <!DOCTYPE html>
@@ -25,7 +26,7 @@ validaUsuario($conn);
                         <h2>EQUIPAMENTOS EM ESTOQUE</h2>
                         <button class="btn-reset" id="resetBtn">Reset</button>
                 </div>
-                <form action="../vw/index.php" method="post">
+                <form id="form-princ" action="../vw/index.php" method="post">
                         <div class="form-group mb-3">
                                 <input type="text" class="form-control" id="globalFilter" placeholder="Filtro Geral">
                                 <button type="submit" class="btn-selecionados">COTAÇÃO</button>
@@ -283,14 +284,16 @@ validaUsuario($conn);
 
                                                         $bonus2 = /* $comissaoVariavel + */ ($comissaoVariavel * $percentPont);
 
-                                                        /* Verifica se a serie esta na situação disponivel, se sim habilita a flag */
+                                                        /* Verifica se a serie esta na situação disponivel, se sim habilita a flag e input de valor */
 
                                                         $situacao = $row['SITUACAO'];
                                                         $inputRadio = "";
                                                         if ($situacao == 'DISPONIVEL') {
                                                                 $inputRadio = "<input id='flagSerie' type='checkbox' name='selecionado[]' value='$row[SERIE]'>";
+                                                                $inputVlr = "<input id='vlrembalagem' class='vlrembalagem' type='number' step='0.01' name='vlrembalagem[]'>";
                                                         } else {
                                                                 $inputRadio = "";
+                                                                $inputVlr = "";
                                                         }
 
                                                         $tabela .= "<tr>";
@@ -299,10 +302,10 @@ validaUsuario($conn);
                                                         $tabela .= "<td class=''>" . $row['STATUS'] . "</td>";
                                                         $tabela .= "<td class=''>" . $row['MARCA'] . "</td>";
                                                         $tabela .= "<td class='sticky fixed fixed-col'>" . $row['MODELO'] . "</td>";
-                                                        $tabela .= "<td class='sticky fixed2 fixed-col fixed-col-2'>$inputRadio " . $row['SERIE'] . "</td>";
-                                                        $tabela .= "<td>" . $row['PB'] . "</td>";
-                                                        $tabela .= "<td>" . $row['COLOR'] . "</td>";
-                                                        $tabela .= "<td>" . $row['MedidorTotal'] . "</td>";
+                                                        $tabela .= "<td class='sticky fixed2 fixed-col fixed-col-2'>$inputRadio " . $row['SERIE'] . "$inputVlr</td>";
+                                                        $tabela .= "<td>" . number_format($row['PB'], 0, '', '.') . "</td>";
+                                                        $tabela .= "<td>" . number_format($row['COLOR'] , 0, '', '.') . "</td>";
+                                                        $tabela .= "<td>" . number_format($$row['MedidorTotal'], 0, '', '.') . "</td>";
                                                         $tabela .= "<td>" . $row['VALORBASE'] . "</td>";
                                                         $tabela .= "<td>" . $row['FATOR'] . "</td>";
                                                         $tabela .= "<td>" . $row['MINIMO'] . "</td>";
@@ -329,7 +332,6 @@ validaUsuario($conn);
                                                 ?>
                                         </tbody>
                                 </table>
-
                 </form>
         </div>
         <div class="acoes-rodape">
@@ -344,6 +346,7 @@ validaUsuario($conn);
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="../JS/filtros.js" charset="utf-8"></script>
+        <script src="../JS/forms.js" charset="utf-8"></script>
 </body>
 
 </html>
