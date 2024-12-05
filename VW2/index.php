@@ -48,6 +48,7 @@ ini_set('max_input_vars', 3000);
                                                 MARCA,
                                                 MODELO,
                                                 SERIE,
+                                                NOME FAIXA,
                                                 PB,
                                                 COLOR,
                                                 TOTAL MedidorTotal,
@@ -67,7 +68,8 @@ ini_set('max_input_vars', 3000);
                                                 CAST(DTCAD AS DATE) DTCAD,
                                                 CAST(DATACHEGADA AS DATE) DATACHEGADADATE
                                         FROM Equipamentos_Estoque_PHP
-                                        LEFT JOIN TB01010 ON TB01010_CODIGO = CODPRODUTO";
+                                        LEFT JOIN TB01010 ON TB01010_CODIGO = CODPRODUTO
+                                        LEFT JOIN GS_FAIXA ON FAIXA = FATOR AND CODIGO = CODPRODUTO";
                                 $stmt = sqlsrv_query($conn, $sql);
 
                                 ?>
@@ -102,6 +104,11 @@ ini_set('max_input_vars', 3000);
                                                                         class="form-control filter" data-column="4">
                                                         </th>
                                                         <th class="sticky fixed2 fixed-col fixed-col-2">SERIE <i
+                                                                        class="fa fa-sort" aria-hidden="true"></i><input
+                                                                        onclick="clicouNoFilho(event)" type="text"
+                                                                        class="form-control filter" data-column="5">
+                                                        </th>
+                                                        <th class="sticky fixed2 fixed-col fixed-col-2">FAIXA <i
                                                                         class="fa fa-sort" aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="5">
@@ -290,19 +297,36 @@ ini_set('max_input_vars', 3000);
                                                         $inputRadio = "";
                                                         if ($situacao == 'DISPONIVEL') {
                                                                 $inputRadio = "<input id='flagSerie' type='checkbox' name='selecionado[]' value='$row[SERIE]'>";
-                                                                $inputVlr = "<input id='vlrembalagem' class='vlrembalagem' type='number' step='0.01' name='vlrembalagem[]'>";
+                                                                $inputVlr = "<input id='vlrembalagem' class='vlrembalagem' type='number' step='0.01' placeholder='Vlr Emb' name='vlrembalagem[]'>";
                                                         } else {
                                                                 $inputRadio = "";
                                                                 $inputVlr = "";
                                                         }
 
+                                                        /* Define o nome ficticio dos status */
+                                                        $statusReal = $row['STATUS'];
+                                                        if(strpos($statusReal, 'PRONTA') !== false && strpos($statusReal, 'PALLET') == false){
+                                                                $statusFic = 'PRONTA';
+                                                        }elseif(strpos($statusReal, 'PRONTA') !== false && strpos($statusReal, 'PALLET') !== false){
+                                                                $statusFic = 'PRONTA PALLET';
+                                                        }elseif(strpos($statusReal, 'SUCATA') !== false){
+                                                                $statusFic = 'SUCATA';
+                                                        }elseif(strpos($statusReal, 'TRANSITO') !== false){
+                                                                $statusFic = 'TRANSITO';
+                                                        }else{
+                                                                $statusFic = 'PRODUÇÃO';
+                                                        }
+
+                                                        
+
                                                         $tabela .= "<tr>";
                                                         $tabela .= "<td class=''>" . $row['CONTAINER'] . "</td>";
                                                         $tabela .= "<td class=''>" . $row['DATACHEGADA'] . "</td>";
-                                                        $tabela .= "<td class=''>" . $row['STATUS'] . "</td>";
+                                                        $tabela .= "<td class=''>" . $statusFic . "</td>";
                                                         $tabela .= "<td class=''>" . $row['MARCA'] . "</td>";
                                                         $tabela .= "<td class='sticky fixed fixed-col'>" . $row['MODELO'] . "</td>";
                                                         $tabela .= "<td class='sticky fixed2 fixed-col fixed-col-2'>$inputRadio " . $row['SERIE'] . "$inputVlr</td>";
+                                                        $tabela .= "<td class=''>" . $row['FAIXA'] . "</td>";
                                                         $tabela .= "<td>" . number_format($row['PB'], 0, '', '.') . "</td>";
                                                         $tabela .= "<td>" . number_format($row['COLOR'] , 0, '', '.') . "</td>";
                                                         $tabela .= "<td>" . number_format($$row['MedidorTotal'], 0, '', '.') . "</td>";

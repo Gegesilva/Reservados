@@ -1,3 +1,13 @@
+USE [TINSEI]
+GO
+
+/****** Object:  View [dbo].[Equipamentos_reservados_N]    Script Date: 05/12/2024 14:34:13 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
 
 ALTER VIEW [dbo].[Equipamentos_reservados_N]
 AS

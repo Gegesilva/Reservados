@@ -150,11 +150,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                         <th>PRODUTO</th>
                         <th>REFERENCIA</th>
                         <th>SÉRIE</th>
+                        <th>FAIXA</th>
                         <!-- <th class="currency">PREVISÃO CHEGADA</th> -->
                         <th class="currency">STATUS</th>
-                        <th>MEDIDOR PB</th>
-                        <th>MEDIDOR COLOR</th>
-                        <th>MEDIDOR TOTAL</th>
+                        <th>CONTADOR PB</th>
+                        <th>CONTADOR COLOR</th>
+                        <th>CONTADOR TOTAL</th>
                         <th class="currency">VALOR FINAL</th>
                     </tr>
                     </tr>
@@ -225,12 +226,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                                             'N/A' 
                                         END PREVISAOCHEGADA,
                                         CODSTATUS,
-                                        STATUS
+                                        STATUS,
+                                        NOME FAIXA
                                         
                                         from FT02002(@EMPRESA,@PRODUTO,@OPERACAO,@CONDICAO,@CLIENTE,@VENDACONS,@TABELA,@VALORBASE)
                                         LEFT JOIN TB01010 ON TB01010_CODIGO = @PRODUTO
                                         LEFT JOIN TB02054 ON TB02054_PRODUTO = @PRODUTO AND TB02054_CODEMP = @EMPRESA AND TB02054_NUMSERIE = @SERIAL
                                         LEFT JOIN Equipamentos_Estoque_PHP ON SERIE = @SERIAL
+                                        LEFT JOIN GS_FAIXA ON CODIGO = TB02054_PRODUTO AND FAIXA = TB02054_FATOR
                                     ";
                         $stmt = sqlsrv_query($conn, $sql);
 
@@ -249,6 +252,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                                 $tabela .= "<td>" . $CodProd . "</td>";
                                 $tabela .= "<td>" . $row['REFERENCIA'] . "</td>";
                                 $tabela .= "<td>" . $row['SERIE'] . "</td>";
+                                $tabela .= "<td>" . $row['FAIXA'] . "</td>";
                                 /* $tabela .= "<td class='currency'>" . $row['PREVISAOCHEGADA'] . "</td>"; */
                                 $tabela .= "<td class='currency'>" . $row['STATUS'] . "</td>";
                                 $tabela .= "<td>" . $row['MEDIDORPB'] . "</td>";
@@ -277,7 +281,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                                         $row['VALORFINALNUM'],
                                         $tabelaCustCod,
                                         $obs,
-                                        $embalagem
+                                        $embalagem,
+                                        $row['FAIXA']
                                     );
                                 }
                             }
@@ -291,12 +296,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                     <tr>
                         <th colspan="6">Total</th>
                         <th></th>
+                        <th></th>
                         <th id="totalValorFinal" class="currency">R$ 0,00</th>
                     </tr>
                     <tr>
-                        <th colspan="6">Vlr Embalagem</th>
+                        <th colspan="6">Valor Embalagem</th>
+                        <th></th>
                         <th></th>
                         <th class="currency" id="ValorEmbalagem"><?=$embalagem?></th>
+                    </tr>
+                    <tr>
+                        <th colspan="6">Total Geral</th>
+                        <th></th>
+                        <th></th>
+                        <th class="currency" id="TotalGeral">R$ 0,00</th>
                     </tr>
                 </tfoot>
             </table>

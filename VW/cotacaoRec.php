@@ -175,11 +175,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                         <th>PRODUTO</th>
                         <th>REFERENCIA</th>
                         <th>SÉRIE</th>
+                        <th>FAIXA</th>
                         <!-- <th class="currency">PREVISÃO CHEGADA</th> -->
                         <th class="currency">STATUS</th>
-                        <th>MEDIDOR PB</th>
-                        <th>MEDIDOR COLOR</th>
-                        <th>MEDIDOR TOTAL</th>
+                        <th>CONTADOR PB</th>
+                        <th>CONTADOR COLOR</th>
+                        <th>CONTADOR TOTAL</th>
                         <th class="currency">VALOR FINAL</th>
                     </tr>
                     </tr>
@@ -208,6 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                                     ,[MEDIDORTOTAL]
                                     ,FORMAT(VALORFINAL, 'C','PT-BR') VALORFINAL
                                     ,[NUMSERIE]
+                                    ,[FAIXA]
                                     ,[DATA]
                                     ,[TABELA]
                                 FROM [dbo].[GS_COTACOES]
@@ -224,6 +226,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                                 $tabela .= "<td>" . $row['PRODUTO'] . "</td>";
                                 $tabela .= "<td>" . $row['REFERENCIA'] . "</td>";
                                 $tabela .= "<td>" . $row['NUMSERIE'] . "</td>";
+                                $tabela .= "<td>" . $row['FAIXA'] . "</td>";
                                 /* $tabela .= "<td class='currency'>" . $row['PREVISAOCHEGADA'] . "</td>"; */
                                 $tabela .= "<td class='currency'>" . $row['STATUS'] . "</td>";
                                 $tabela .= "<td>" . $row['MEDIDORPB'] . "</td>";
@@ -239,16 +242,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                 ?>
                 </tbody>
                 <tfoot>
-                    <tr>
+                <tr>
                         <th colspan="6">Total</th>
+                        <th></th>
                         <th></th>
                         <th id="totalValorFinal" class="currency">R$ 0,00</th>
                     </tr>
                     <tr>
-                        <th colspan="6">Vlr Embalagem</th>
+                        <th colspan="6">Valor Embalagem</th>
+                        <th></th>
                         <th></th>
                         <th class="currency" id="ValorEmbalagem"><?=$embalagem?></th>
                     </tr>
+                    <tr>
+                        <th colspan="6">Total Geral</th>
+                        <th></th>
+                        <th></th>
+                        <th class="currency" id="TotalGeral">R$ 0,00</th>
+                    </tr>
+                </tfoot>
                 </tfoot>
             </table>
         </div>

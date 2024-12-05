@@ -1,3 +1,13 @@
+USE [TINSEI]
+GO
+
+/****** Object:  View [dbo].[Equipamentos_Estoque_PHP]    Script Date: 05/12/2024 14:33:03 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
 
 ALTER VIEW [dbo].[Equipamentos_Estoque_PHP]
 AS
