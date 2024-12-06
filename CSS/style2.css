@@ -141,3 +141,8 @@ h2{
     border: none;
     background-color: #ddd;
   }
+
+  .R-reservado{
+    color: red;
+    font-weight: bold;
+  }

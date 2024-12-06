@@ -299,7 +299,8 @@ ini_set('max_input_vars', 3000);
                                                                 $inputRadio = "<input id='flagSerie' type='checkbox' name='selecionado[]' value='$row[SERIE]'>";
                                                                 $inputVlr = "<input id='vlrembalagem' class='vlrembalagem' type='number' step='0.01' placeholder='Vlr Emb' name='vlrembalagem[]'>";
                                                         } else {
-                                                                $inputRadio = "";
+                                                                $primeiraLetra = substr($row['SITUACAO'], 0, 1);
+                                                                $inputRadio = "<span class='R-reservado'>$primeiraLetra</span>";
                                                                 $inputVlr = "";
                                                         }
 

@@ -9,19 +9,22 @@ include_once "../DB/func.php";
 validaUsuario($conn);
 
 $Vendedor = validaUsuario($conn);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-/* $serie = $_POST['serie']; */
-$estado = $_POST['estado'];
-$pessoa = $_POST['pessoa'];
-$consumo = $_POST['consumo'];
-$condicao = $_POST['condicao'];
-$tabelaCust = $_POST['tabela'];
-$classificacao = $_POST['class'];
-$clienteForm = $_POST['cliente'];
-$cliente = $pessoa . ':' . $estado;
-$obs = $_POST['obs'];
-$embalagem = $_POST['embalagem'];
+    /* $serie = $_POST['serie']; */
+    $estado = $_POST['estado'];
+    $pessoa = $_POST['pessoa'];
+    $consumo = $_POST['consumo'];
+    $condicao = $_POST['condicao'];
+    $tabelaCust = $_POST['tabela'];
+    $classificacao = $_POST['class'];
+    $clienteForm = $_POST['cliente'];
+    $cliente = $pessoa . ':' . $estado;
 
+    $obs = nl2br($_POST['obs']);
+
+    $embalagem = $_POST['embalagem'];
+}
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $series = explode(',', $_POST['selecionado']); // Converte a string em array
     /* print_r($series); */ // Exibe o array
@@ -118,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
 
 <body>
     <div class="cabecalho-result">
-    <H3 class="titulo">COTAÇÃO</H3>
+        <H3 class="titulo">COTAÇÃO</H3>
         <img class="logo" src="../img/logo.jpg" alt="logo">
         <div class="info-bloco">
             <div>
@@ -303,7 +306,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                         <th colspan="6">Valor Embalagem</th>
                         <th></th>
                         <th></th>
-                        <th class="currency" id="ValorEmbalagem"><?=$embalagem?></th>
+                        <th class="currency" id="ValorEmbalagem"><?= $embalagem ?></th>
                     </tr>
                     <tr>
                         <th colspan="6">Total Geral</th>
@@ -317,10 +320,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
     </div>
     <div class="obs">
         <P><b>OBS: </b> VALIDADE DA COTACÃO - 1 DIA</P>
-        &nbsp;<p> - ESSA COTACÃO NÃO RESERVA AS SÉRIES CONTIDAS NO MESMO. <?=$tabelaCustCod?></p>
+        &nbsp;<p> - ESSA COTACÃO NÃO RESERVA AS SÉRIES CONTIDAS NO MESMO. <?= $tabelaCustCod ?></p>
     </div>
     <div class="obs-ins">
-        <P><?=$obs?></p>
+        <P><?= $obs ?></p>
     </div>
     <div class="btn-index">
         <input type="hidden" name="trava" id="trava" value="1">

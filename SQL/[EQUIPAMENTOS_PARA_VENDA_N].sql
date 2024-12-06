@@ -1,7 +1,7 @@
 USE [TINSEI]
 GO
 
-/****** Object:  View [dbo].[EQUIPAMENTOS_PARA_VENDA_N]    Script Date: 05/12/2024 14:33:43 ******/
+/****** Object:  View [dbo].[EQUIPAMENTOS_PARA_VENDA_N]    Script Date: 06/12/2024 14:18:55 ******/
 SET ANSI_NULLS ON
 GO
 
