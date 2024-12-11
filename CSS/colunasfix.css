@@ -37,4 +37,6 @@ th {
 .fixed-col-3 {
     left: 200px;
 }
-
+.filterAgrup{
+    min-width: 15rem;
+}

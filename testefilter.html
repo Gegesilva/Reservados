@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,49 +11,63 @@
       border-collapse: collapse;
       table-layout: fixed;
     }
-    th, td {
+
+    th,
+    td {
       border: 1px solid #ddd;
       padding: 8px;
       text-align: left;
     }
+
     th {
       background-color: #f4f4f4;
       position: sticky;
       top: 0;
-      z-index: 1; /* Cabeçalho com z-index 1 */
+      z-index: 1;
+      /* Cabeçalho com z-index 1 */
     }
+
     .filter-container {
       position: relative;
       width: 100%;
     }
+
     .filter-input {
       width: 100%;
       padding: 5px;
       margin-bottom: 5px;
-      box-sizing: border-box; /* Para garantir que o input ocupe toda a largura disponível */
+      box-sizing: border-box;
+      /* Para garantir que o input ocupe toda a largura disponível */
     }
+
     .dropdown {
       display: none;
       position: absolute;
       background-color: white;
       border: 1px solid #ddd;
-      width: calc(100% - 10px); /* Ajuste de largura para não cortar */
+      width: calc(100% - 10px);
+      /* Ajuste de largura para não cortar */
       max-height: 200px;
       overflow-y: auto;
-      z-index: 10000; /* Garantir que a lista fique na frente de tudo */
+      z-index: 10000;
+      /* Garantir que a lista fique na frente de tudo */
       padding: 5px;
       box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-      margin-top: 5px; /* Distância entre o input e a lista */
+      margin-top: 5px;
+      /* Distância entre o input e a lista */
     }
+
     .dropdown-item {
       display: flex;
       align-items: center;
       margin-bottom: 5px;
     }
+
     .dropdown-item label {
       margin-left: 5px;
       cursor: pointer;
     }
+
     .apply-button {
       display: block;
       padding: 5px;
@@ -64,11 +79,13 @@
       margin-top: 5px;
       width: 100%;
     }
+
     .apply-button:hover {
       background-color: #0056b3;
     }
   </style>
 </head>
+
 <body>
   <table id="filterTable">
     <thead>
@@ -76,44 +93,109 @@
         <th>Coluna 1</th>
         <th>Coluna 2</th>
         <th>Coluna 3</th>
+        <th>Coluna 4</th>
       </tr>
       <tr>
         <th>
           <div class="filter-container">
-            <input type="text" class="filter-input" id="filter1" oninput="showDropdown(1)" placeholder="Filtrar Coluna 1">
+            <input type="text" class="filter-input" id="filter1" oninput="showDropdown(1)"
+              placeholder="Filtrar Coluna 1">
             <div class="dropdown" id="dropdown1"></div>
           </div>
         </th>
         <th>
           <div class="filter-container">
-            <input type="text" class="filter-input" id="filter2" oninput="showDropdown(2)" placeholder="Filtrar Coluna 2">
+            <input type="text" class="filter-input" id="filter2" oninput="showDropdown(2)"
+              placeholder="Filtrar Coluna 2">
             <div class="dropdown" id="dropdown2"></div>
           </div>
         </th>
         <th>
           <div class="filter-container">
-            <input type="text" class="filter-input" id="filter3" oninput="showDropdown(3)" placeholder="Filtrar Coluna 3">
+            <input type="text" class="filter-input" id="filter3" oninput="showDropdown(3)"
+              placeholder="Filtrar Coluna 3">
             <div class="dropdown" id="dropdown3"></div>
+          </div>
+        </th>
+        <th>
+          <div class="filter-container">
+            <input type="text" class="filter-input" id="filter4" oninput="showDropdown(4)"
+              placeholder="Filtrar Coluna 4">
+            <div class="dropdown" id="dropdown4"></div>
           </div>
         </th>
       </tr>
     </thead>
     <tbody>
-      <tr><td>A maçã é vermelha</td><td>A banana é amarela</td><td>A cereja é doce</td></tr>
-      <tr><td>A maçã está madura</td><td>A torta de mirtilo é deliciosa</td><td>A cenoura é laranja</td></tr>
-      <tr><td>A damasco é doce</td><td>As amoras são suculentas</td><td>O pepino é fresco</td></tr>
-      <tr><td>A árvore de amendoeira é alta</td><td>Os feijões são nutritivos</td><td>A couve-flor é branca</td></tr>
-      <tr><td>As sementes de anis são pequenas</td><td>O brócolis é verde</td><td>O aipo é crocante</td></tr>
-      <tr><td>A torta de maçã é uma sobremesa</td><td>A manteiga derrete facilmente</td><td>O queijo é salgado</td></tr>
-      <tr><td>O aspargo é saudável</td><td>O pão é macio</td><td>O milho é amarelo</td></tr>
-      <tr><td>A pizza de anchova é salgada</td><td>Os bagels são mastigáveis</td><td>O chocolate é doce</td></tr>
-      <tr><td>Os alcachofras são verdes</td><td>O bacon é crocante</td><td>O chili é picante</td></tr>
-      <tr><td>Os grãos de amaranto são nutritivos</td><td>A sopa de cevada é substanciosa</td><td>O bolo é delicioso</td></tr>
+      <tr>
+        <td>A maçã é vermelha</td>
+        <td>A banana é amarela</td>
+        <td>A cereja é doce</td>
+        <td>A cereja é doce</td>
+      </tr>
+      <tr>
+        <td>A maçã está madura</td>
+        <td>A torta de mirtilo é deliciosa</td>
+        <td>A cenoura é laranja</td>
+        <td>A cenoura é laranja</td>
+      </tr>
+      <tr>
+        <td>A damasco é doce</td>
+        <td>As amoras são suculentas</td>
+        <td>O pepino é fresco</td>
+        <td>O pepino é fresco</td>
+      </tr>
+      <tr>
+        <td>A árvore de amendoeira é alta</td>
+        <td>Os feijões são nutritivos</td>
+        <td>A couve-flor é branca</td>
+        <td>A couve-flor é branca</td>
+      </tr>
+      <tr>
+        <td>As sementes de anis são pequenas</td>
+        <td>O brócolis é verde</td>
+        <td>O aipo é crocante</td>
+        <td>O aipo é crocante</td>
+      </tr>
+      <tr>
+        <td>A torta de maçã é uma sobremesa</td>
+        <td>A manteiga derrete facilmente</td>
+        <td>O queijo é salgado</td>
+        <td>O queijo é salgado</td>
+      </tr>
+      <tr>
+        <td>O aspargo é saudável</td>
+        <td>O pão é macio</td>
+        <td>O milho é amarelo</td>
+        <td>O milho é amarelo</td>
+      </tr>
+      <tr>
+        <td>A pizza de anchova é salgada</td>
+        <td>Os bagels são mastigáveis</td>
+        <td>O chocolate é doce</td>
+        <td>O chocolate é doce</td>
+      </tr>
+      <tr>
+        <td>Os alcachofras são verdes</td>
+        <td>O bacon é crocante</td>
+        <td>O chili é picante</td>
+        <td>O chili é picante</td>
+      </tr>
+      <tr>
+        <td>Os grãos de amaranto são nutritivos</td>
+        <td>A sopa de cevada é substanciosa</td>
+        <td>O bolo é delicioso</td>
+        <td>O bolo é delicioso</td>
+      </tr>
     </tbody>
   </table>
 
   <script>
-    let filters = [[], [], []];
+    let filters = [
+      [],
+      [],
+      []
+    ];
 
     // Função que mostra o dropdown (lista suspensa) de filtros para cada coluna
     function showDropdown(columnIndex) {
@@ -221,7 +303,7 @@
       }
     }
 
-    document.addEventListener("click", function(event) {
+    document.addEventListener("click", function (event) {
       const dropdowns = document.querySelectorAll('.dropdown');
       dropdowns.forEach(dropdown => {
         if (!dropdown.contains(event.target) && !event.target.matches('.filter-input')) {
@@ -231,4 +313,5 @@
     });
   </script>
 </body>
+
 </html>

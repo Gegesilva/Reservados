@@ -5,6 +5,8 @@ header('Content-type: text/html; charset=ISO-8895-1');
 include_once "../DB/conexaoSQL.php";
 include_once "../DB/filtros.php";
 include_once "../DB/func.php";
+error_reporting(0); // Desativa a exibição de todos os tipos de erros
+ini_set('display_errors', '0'); // Garante que erros não sejam exibidos no navegador
 
 validaUsuario($conn);
 
@@ -43,6 +45,7 @@ while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
     $classificacao = $row['CLASSIFICACAO'];
     $obs = $row['OBS'];
     $embalagem = $row['VLREMBALAGEM'];
+    $status = $row['STATUS'];
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -105,7 +108,7 @@ $QtCarac = mb_strlen($cliente, "utf-8");
 if ($QtCarac == 8) {
     $cliente = $cliente[0];
 } else {
-    $cliente = $cliente[2].$cliente[3];
+    $cliente = $cliente[2] . $cliente[3];
 }
 
 /* Da o nome correto para a variavel consumo */
@@ -115,17 +118,20 @@ if ($consumo == 'N') {
     $nomeConsumo = 'Consumo';
 }
 
-/* evita que a função de log seja executada ao atualizar a pagina */
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == false) {
-    $rodarlog = true;
-    $_SESSION['funcao_executada'] = true;
-    /* Gerar contador */
-    $contador = contador($conn);
-    $_SESSION['mostra_contador'] = contador($conn);
+/* omitir campos se status igual a N */
+if ($status == 'N') {
+    $clnSerie = "<th></th>";
+    $clnStatus = "<th></th>";
+    $clnPB = "<th></th>";
+    $clnColor = "<th></th>";
+    $clnTotal = "<th></th>";
 } else {
-    $rodarlog = false;
+    $clnSerie = "<th>SÉRIE</th>";
+    $clnStatus = "<th class='currency'>STATUS</th>";
+    $clnPB = "<th>CONTADOR PB</th>";
+    $clnColor = "<th>CONTADOR COLOR</th>";
+    $clnTotal = "<th>CONTADOR TOTAL</th>";
 }
-
 
 ?>
 
@@ -141,14 +147,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
+
 <body>
     <div class="cabecalho-result">
-    <H3 class="titulo">COTAÇÃO</H3>
+        <H3 class="titulo">COTAÇÃO</H3>
         <img class="logo" src="../img/logo.jpg" alt="logo">
         <div class="info-bloco">
             <div>
                 <span><b><?= $QtCarac == 8 ? "Cliente: " : "Estado: " ?></b>
-                         <?= $QtCarac == 8 ? $NomeCli : $cliente; ?></span>
+                    <?= $QtCarac == 8 ? $NomeCli : $cliente; ?></span>
                 <span><b>Pessoa: </b> <?= $pessoa; ?></span>
             </div>
             <div>
@@ -160,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                 <span><b>Classificação: </b> <?= $classificacao; ?></span>
             </div>
             <div>
-                <span><b>Cotação: </b> <?= $_SESSION['mostra_contador']; ?></span>
+                <span><b>Cotação: </b> <?= $codCotacao ?> - <?= $tabelaCust ?></span>
             </div>
         </div>
     </div>
@@ -174,13 +181,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                     <tr>
                         <th>PRODUTO</th>
                         <th>REFERENCIA</th>
-                        <th>SÉRIE</th>
+                        <?= $clnSerie ?>
                         <th>FAIXA</th>
                         <!-- <th class="currency">PREVISÃO CHEGADA</th> -->
-                        <th class="currency">STATUS</th>
-                        <th>CONTADOR PB</th>
-                        <th>CONTADOR COLOR</th>
-                        <th>CONTADOR TOTAL</th>
+                        <?= $clnStatus ?>
+                        <?= $clnPB ?>
+                        <?= $clnColor ?>
+                        <?= $clnTotal ?>
                         <th class="currency">VALOR FINAL</th>
                     </tr>
                     </tr>
@@ -222,16 +229,57 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                             <?php
                             $tabela = "";
                             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                /* Pega o nome do status atraves do codigo salvo no log */
+                                $codstatus = $row['STATUS'];
+
+                                $sql2 = "SELECT TOP 1
+                                            STATUS NomeStatus
+                                        FROM Equipamentos_Estoque_PHP
+                                        WHERE CODSITUACAO = '$codstatus'";
+                                $stmt2 = sqlsrv_query($conn, $sql2);
+                                while ($row2 = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
+                                    $statusReal = $row2['NomeStatus'];
+                                }
+
+                                /* Define o nome ficticio dos status */
+                                if (strpos($statusReal, 'PRONTA') !== false && strpos($statusReal, 'PALLET') == false) {
+                                    $statusFic = 'PRONTA';
+                                } elseif (strpos($statusReal, 'PRONTA') !== false && strpos($statusReal, 'PALLET') !== false) {
+                                    $statusFic = 'PRONTA PALLET';
+                                } elseif (strpos($statusReal, 'SUCATA') !== false) {
+                                    $statusFic = 'SUCATA';
+                                } elseif (strpos($statusReal, 'TRANSITO') !== false) {
+                                    $statusFic = 'TRANSITO';
+                                } else {
+                                    $statusFic = 'PRODUÇÃO';
+                                }
+
+                                /* omitir dados se flag marcada */
+                                if($status == 'N'){
+                                    $dbSerie = "<td> </td>";
+                                    $dbStatus = "<td> </td>";
+                                    $dbPB = "<td> </td>";
+                                    $dbColor = "<td> </td>";
+                                    $dbTotal = "<td> </td>";
+                                    $codStatus = "N";
+                                }else{
+                                    $dbSerie = "<td>  $row[NUMSERIE] </td>";
+                                    $dbStatus = "<td class='currency'>  $statusFic </td>";
+                                    $dbPB = "<td>  $row[MEDIDORPB] </td>";
+                                    $dbColor = "<td>  $row[MEDIDORCOLOR] </td>";
+                                    $dbTotal = "<td>  $row[MEDIDORTOTAL] </td>";
+                                }
+
                                 $tabela .= "<tr>";
                                 $tabela .= "<td>" . $row['PRODUTO'] . "</td>";
                                 $tabela .= "<td>" . $row['REFERENCIA'] . "</td>";
-                                $tabela .= "<td>" . $row['NUMSERIE'] . "</td>";
+                                $tabela .= $dbSerie;
                                 $tabela .= "<td>" . $row['FAIXA'] . "</td>";
                                 /* $tabela .= "<td class='currency'>" . $row['PREVISAOCHEGADA'] . "</td>"; */
-                                $tabela .= "<td class='currency'>" . $row['STATUS'] . "</td>";
-                                $tabela .= "<td>" . $row['MEDIDORPB'] . "</td>";
-                                $tabela .= "<td>" . $row['MEDIDORCOLOR'] . "</td>";
-                                $tabela .= "<td>" . $row['MEDIDORTOTAL'] . "</td>";
+                                $tabela .= $dbStatus;
+                                $tabela .= $dbPB;
+                                $tabela .= $dbColor;
+                                $tabela .= $dbTotal;
                                 $tabela .= "<td class='currency'>" . $row['VALORFINAL'] . "</td>";
                                 $tabela .= "</tr>";
                             }
@@ -242,7 +290,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                 ?>
                 </tbody>
                 <tfoot>
-                <tr>
+                    <tr>
                         <th colspan="6">Total</th>
                         <th></th>
                         <th></th>
@@ -252,7 +300,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                         <th colspan="6">Valor Embalagem</th>
                         <th></th>
                         <th></th>
-                        <th class="currency" id="ValorEmbalagem"><?=$embalagem?></th>
+                        <th class="currency" id="ValorEmbalagem"><?= $embalagem ?></th>
                     </tr>
                     <tr>
                         <th colspan="6">Total Geral</th>
@@ -267,10 +315,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
     </div>
     <div class="obs">
         <P><b>OBS: </b> VALIDADE DA COTACÃO - 1 DIA</P>
-        &nbsp;<p> - ESSA COTACÃO NÃO RESERVA AS SÉRIES CONTIDAS NO MESMO. <?=$tabelaCust?></p>
     </div>
     <div class="obs-ins">
-        <P><?=$obs?></p>
+        <P><?= $obs ?></p>
     </div>
     <div class="btn-index">
         <input type="hidden" name="trava" id="trava" value="1">

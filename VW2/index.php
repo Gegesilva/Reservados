@@ -4,6 +4,8 @@ include_once "../DB/conexaoSQL.php";
 include_once "../DB/func.php";
 validaUsuario($conn);
 ini_set('max_input_vars', 3000);
+error_reporting(0); // Desativa a exibição de todos os tipos de erros
+ini_set('display_errors', '0'); // Garante que erros não sejam exibidos no navegador
 
 ?>
 <!DOCTYPE html>
@@ -33,22 +35,30 @@ ini_set('max_input_vars', 3000);
                         </div>
                         <div class="table-container">
                                 <?php
-                                $sql =
-                                        "SELECT 
+                                $sql = "SELECT
                                                 FORMAT(DATACHEGADA, 'dd/MM/yyyy') DATACHEGADA,
                                                 FORMAT(VALORBASE, 'C', 'pt-br') VALORBASE,
                                                 VALORBASE VALORBASENUM,
                                                 FORMAT(CUSTOSERIAL, 'C','pt-br') CUSTOSERIAL,
+                                                FORMAT(AVISTA, 'C', 'pt-br') AVISTA,
+                                                FORMAT(AVISTA3, 'C', 'pt-br') AVISTA3,
+                                                FORMAT(AVISTA6, 'C', 'pt-br') AVISTA6,
+                                                FORMAT(AVISTA9, 'C','pt-br') AVISTA9,
+                                                FORMAT(BASICO, 'C','pt-br') BASICO,
+                                                FORMAT(BASICO3, 'C','pt-br') BASICO3,
+                                                FORMAT(BASICO6, 'C','pt-br') BASICO6,
+                                                FORMAT(BASICO9, 'C','pt-br') BASICO9,
                                                 FORMAT(ALMEJADO, 'C','pt-br') ALMEJADO,
-                                                FORMAT(MINIMO, 'C', 'pt-br') MINIMO,
-                                                FORMAT(BASICO, 'C', 'pt-br') BASICO,
-                                                FORMAT(PALLET, 'C', 'pt-br') PALLET,
+                                                FORMAT(PALLET_AVISTA, 'C','pt-br') PALLET_AVISTA,
+                                                FORMAT(PALLET, 'C','pt-br') PALLET,
+                                                EMPRESA,
                                                 CONTAINER,
                                                 STATUS,
                                                 MARCA,
+                                               -- CONCAT(CODPRODUTO,' - ',MODELO) MODELO,
                                                 MODELO,
                                                 SERIE,
-                                                NOME FAIXA,
+                                                ISNULL(NOME, 'Sem Faixa') FAIXA,
                                                 PB,
                                                 COLOR,
                                                 TOTAL MedidorTotal,
@@ -69,7 +79,7 @@ ini_set('max_input_vars', 3000);
                                                 CAST(DATACHEGADA AS DATE) DATACHEGADADATE
                                         FROM Equipamentos_Estoque_PHP
                                         LEFT JOIN TB01010 ON TB01010_CODIGO = CODPRODUTO
-                                        LEFT JOIN GS_FAIXA ON FAIXA = FATOR AND CODIGO = CODPRODUTO";
+                                        LEFT JOIN GS_FAIXA ON GS_FAIXA.FAIXA = FATOR AND CODIGO = CODPRODUTO";
                                 $stmt = sqlsrv_query($conn, $sql);
 
                                 ?>
@@ -78,155 +88,249 @@ ini_set('max_input_vars', 3000);
                                         <thead>
                                                 <tr>
                                                         <!-- Cabeçalhos das Colunas com Filtro -->
-                                                        <th class="sticky ">CONTAINER <i class="fa fa-sort"
+                                                        <th class="sticky ">EMPRESA <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="0">
                                                         </th>
-                                                        <th class="sticky ">DATA CHEGADA <i class="fa fa-sort"
+                                                        <th class="sticky">DATA CHEGADA <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="1">
                                                         </th>
-                                                        <th class="sticky ">STATUS <i class="fa fa-sort"
-                                                                        aria-hidden="true"></i><input
-                                                                        onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="2">
+
+                                                        <th class="sticky filterAgrup ">
+                                                                <div class="filter-container">MARCA <i
+                                                                                class="fa fa-sort"
+                                                                                aria-hidden="true"></i><input
+                                                                                onclick="clicouNoFilho(event)"
+                                                                                oninput="showDropdown(3)" id="filter3"
+                                                                                type="text" class="form-control filter filter-input"
+                                                                                data-column="2">
+                                                                        <div class="dropdown" id="dropdown3">
+                                                                        </div>
+                                                                </div>
                                                         </th>
-                                                        <th class="sticky ">MARCA <i class="fa fa-sort"
-                                                                        aria-hidden="true"></i><input
-                                                                        onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="3">
+
+                                                        <th class="sticky filterAgrup fixed fixed-col ">
+                                                                <div class="filter-container">MODELO <i
+                                                                                class="fa fa-sort"
+                                                                                aria-hidden="true"></i><input
+                                                                                onclick="clicouNoFilho(event)"
+                                                                                oninput="showDropdown(4)" id="filter4"
+                                                                                type="text" class="form-control filter filter-input"
+                                                                                data-column="3">
+                                                                        <div class="dropdown" id="dropdown4">
+                                                                        </div>
+                                                                </div>
                                                         </th>
-                                                        <th class="sticky fixed fixed-col">MODELO <i class="fa fa-sort"
-                                                                        aria-hidden="true"></i><input
+                                                        <!-- <th class="sticky filterAgrup fixed fixed-col-2 ">
+                                                                <div class="filter-container">SÉRIE <i
+                                                                                class="fa fa-sort"
+                                                                                aria-hidden="true"></i><input
+                                                                                onclick="clicouNoFilho(event)"
+                                                                                oninput="showDropdown(5)" id="filter5"
+                                                                                type="text" class="form-control filter"
+                                                                                data-column="4">
+                                                                        <div class="dropdown" id="dropdown5">
+                                                                        </div>
+                                                                </div>
+                                                        </th> -->
+                                                         <th class="sticky  fixed2 fixed-col fixed-col-2">SÉRIE <i
+                                                                        class="fa fa-sort" aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="4">
                                                         </th>
-                                                        <th class="sticky fixed2 fixed-col fixed-col-2">SERIE <i
-                                                                        class="fa fa-sort" aria-hidden="true"></i><input
+                                                        <th class="sticky ">STATUS <i class="fa fa-sort"
+                                                                        aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="5">
                                                         </th>
-                                                        <th class="sticky fixed2 fixed-col fixed-col-2">FAIXA <i
-                                                                        class="fa fa-sort" aria-hidden="true"></i><input
-                                                                        onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="5">
-                                                        </th>
-                                                        <th class="sticky">PB <i class="fa fa-sort"
+                                                        <!-- <th class="sticky filterAgrup ">
+                                                                <div class="filter-container">STATUS <i
+                                                                                class="fa fa-sort"
+                                                                                aria-hidden="true"></i><input
+                                                                                onclick="clicouNoFilho(event)"
+                                                                                oninput="showDropdown(6)" id="filter6"
+                                                                                type="text" class="form-control filter"
+                                                                                data-column="5">
+                                                                        <div class="dropdown" id="dropdown6">
+                                                                        </div>
+                                                                </div>
+                                                        </th> -->
+                                                        <!-- <th class="sticky filterAgrup ">
+                                                                <div class="filter-container">FAIXA <i
+                                                                                class="fa fa-sort"
+                                                                                aria-hidden="true"></i><input
+                                                                                onclick="clicouNoFilho(event)"
+                                                                                oninput="showDropdown(7)" id="filter7"
+                                                                                type="text" class="form-control filter"
+                                                                                data-column="6">
+                                                                        <div class="dropdown" id="dropdown7">
+                                                                        </div>
+                                                                </div>
+                                                        </th> -->
+                                                
+                                                        <th class="sticky ">FAIXA <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="6">
                                                         </th>
-                                                        <th class="sticky">COLOR <i class="fa fa-sort"
+                                                        <th class="sticky">PB <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="7">
                                                         </th>
-                                                        <th class="sticky">TOTAL <i class="fa fa-sort"
+                                                        <th class="sticky">COLOR <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="8">
                                                         </th>
-                                                        <th class="sticky">VALOR BASE <i class="fa fa-sort"
+                                                        <th class="sticky">TOTAL <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="9">
                                                         </th>
-                                                        <th class="sticky">FATOR <i class="fa fa-sort"
+                                                        <!-- <th class="sticky">VALOR BASE <i class="fa fa-sort"
+                                                                        aria-hidden="true"></i><input
+                                                                        onclick="clicouNoFilho(event)" type="text"
+                                                                        class="form-control filter" data-column="8"> -->
+                                                        </th>
+                                                        <!-- <th class="sticky">FATOR <i class="fa fa-sort"
+                                                                        aria-hidden="true"></i><input
+                                                                        onclick="clicouNoFilho(event)" type="text"
+                                                                        class="form-control filter" data-column="10">
+                                                        </th> -->
+                                                        <th class="sticky">A VISTA <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="10">
                                                         </th>
-                                                        <th class="sticky">MINIMO <i class="fa fa-sort"
+                                                        <th class="sticky">A VISTA + 3% <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="11">
                                                         </th>
-                                                        <th class="sticky">BASICO <i class="fa fa-sort"
+                                                        <th class="sticky">A VISTA + 6% <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="12">
                                                         </th>
-                                                        <th class="sticky">ALMEJADO <i class="fa fa-sort"
+                                                        <th class="sticky">A VISTA + 9% <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="13">
                                                         </th>
-                                                        <th class="sticky">PALLET <i class="fa fa-sort"
+                                                        <th class="sticky">BASICO <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="14">
                                                         </th>
-                                                        <th class="sticky">SITUAÇÃO <i class="fa fa-sort"
+                                                        <th class="sticky">BASICO + 3% <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="15">
                                                         </th>
-                                                        <th class="sticky">ORCAMENTO <i class="fa fa-sort"
+                                                        <th class="sticky">BASICO + 6% <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="16">
                                                         </th>
-                                                        <th class="sticky">CLIENTE <i class="fa fa-sort"
+                                                        <th class="sticky">BASICO + 9% <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="17">
                                                         </th>
-                                                        <th class="sticky">VENDEDOR <i class="fa fa-sort"
+                                                        <th class="sticky">ALMEJADO <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="18">
                                                         </th>
-                                                        <th class="sticky">CLASSIFICAÇÃO <i class="fa fa-sort"
+                                                        <th class="sticky">PALLET A VISTA <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="19">
                                                         </th>
-                                                        <th class="sticky">OBS PEDIDO <i class="fa fa-sort"
+                                                        <th class="sticky">PALLET <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="20">
                                                         </th>
-                                                        <th class="sticky">OBS TECNICAS <i class="fa fa-sort"
+                                                        <th class="sticky">SITUAÇÃO <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="21">
                                                         </th>
-                                                        <th class="sticky">NOTA <i class="fa fa-sort"
+                                                        <th class="sticky">CONTAINER <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="22">
                                                         </th>
-                                                        <th class="sticky">LOCAL <i class="fa fa-sort"
+                                                        <th class="sticky">ORCAMENTO <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="23">
                                                         </th>
-                                                        <th class="sticky">COM VAR <i class="fa fa-sort"
+                                                        <th class="sticky">CLIENTE <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="24">
                                                         </th>
-                                                        <th class="sticky">COM FIX <i class="fa fa-sort"
+                                                        <th class="sticky">VENDEDOR <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="25">
                                                         </th>
-                                                        <th class="sticky">BONUS 1<i class="fa fa-sort"
+                                                        <th class="sticky">CLASSIFICAÇÃO <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="26">
                                                         </th>
-                                                        <th class="sticky">BONUS 2<i class="fa fa-sort"
+                                                        <th class="sticky">OBS PEDIDO <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="27">
+                                                        </th>
+                                                        <th class="sticky">OBS TECNICAS <i class="fa fa-sort"
+                                                                        aria-hidden="true"></i><input
+                                                                        onclick="clicouNoFilho(event)" type="text"
+                                                                        class="form-control filter" data-column="28">
+                                                        </th>
+                                                        <th class="sticky">NOTA <i class="fa fa-sort"
+                                                                        aria-hidden="true"></i><input
+                                                                        onclick="clicouNoFilho(event)" type="text"
+                                                                        class="form-control filter" data-column="29">
+                                                        </th>
+                                                        <th class="sticky">LOCAL <i class="fa fa-sort"
+                                                                        aria-hidden="true"></i><input
+                                                                        onclick="clicouNoFilho(event)" type="text"
+                                                                        class="form-control filter" data-column="30">
+                                                        </th>
+                                                        <th class="sticky">COM VAR <i class="fa fa-sort"
+                                                                        aria-hidden="true"></i><input
+                                                                        onclick="clicouNoFilho(event)" type="text"
+                                                                        class="form-control filter" data-column="31">
+                                                        </th>
+                                                        <th class="sticky">COM FIX <i class="fa fa-sort"
+                                                                        aria-hidden="true"></i><input
+                                                                        onclick="clicouNoFilho(event)" type="text"
+                                                                        class="form-control filter" data-column="32">
+                                                        </th>
+                                                        <th class="sticky">BONUS 1<i class="fa fa-sort"
+                                                                        aria-hidden="true"></i><input
+                                                                        onclick="clicouNoFilho(event)" type="text"
+                                                                        class="form-control filter" data-column="33">
+                                                        </th>
+                                                        <th class="sticky">BONUS 2<i class="fa fa-sort"
+                                                                        aria-hidden="true"></i><input
+                                                                        onclick="clicouNoFilho(event)" type="text"
+                                                                        class="form-control filter" data-column="34">
                                                         </th>
                                                 </tr>
                                         </thead>
                                         <tbody>
                                                 <?php
+
                                                 $tabela = "";
                                                 while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                                         $valorVenda = $row['VALORBASENUM'];
@@ -305,39 +409,46 @@ ini_set('max_input_vars', 3000);
                                                         }
 
                                                         /* Define o nome ficticio dos status */
-                                                        $statusReal = $row['STATUS'];
-                                                        if(strpos($statusReal, 'PRONTA') !== false && strpos($statusReal, 'PALLET') == false){
+                                                        /* $statusReal = $row['STATUS'];
+                                                        if (strpos($statusReal, 'PRONTA') !== false && strpos($statusReal, 'PALLET') == false) {
                                                                 $statusFic = 'PRONTA';
-                                                        }elseif(strpos($statusReal, 'PRONTA') !== false && strpos($statusReal, 'PALLET') !== false){
+                                                        } elseif (strpos($statusReal, 'PRONTA') !== false && strpos($statusReal, 'PALLET') !== false) {
                                                                 $statusFic = 'PRONTA PALLET';
-                                                        }elseif(strpos($statusReal, 'SUCATA') !== false){
+                                                        } elseif (strpos($statusReal, 'SUCATA') !== false) {
                                                                 $statusFic = 'SUCATA';
-                                                        }elseif(strpos($statusReal, 'TRANSITO') !== false){
+                                                        } elseif (strpos($statusReal, 'TRANSITO') !== false) {
                                                                 $statusFic = 'TRANSITO';
-                                                        }else{
+                                                        } else {
                                                                 $statusFic = 'PRODUÇÃO';
-                                                        }
+                                                        } */
 
-                                                        
 
                                                         $tabela .= "<tr>";
-                                                        $tabela .= "<td class=''>" . $row['CONTAINER'] . "</td>";
-                                                        $tabela .= "<td class=''>" . $row['DATACHEGADA'] . "</td>";
-                                                        $tabela .= "<td class=''>" . $statusFic . "</td>";
+                                                        $tabela .= "<td class=''>" . $row['EMPRESA'] . "</td>";
+                                                        $tabela .= "<td>" . $row['DATACHEGADA'] . "</td>";
                                                         $tabela .= "<td class=''>" . $row['MARCA'] . "</td>";
                                                         $tabela .= "<td class='sticky fixed fixed-col'>" . $row['MODELO'] . "</td>";
                                                         $tabela .= "<td class='sticky fixed2 fixed-col fixed-col-2'>$inputRadio " . $row['SERIE'] . "$inputVlr</td>";
+                                                        $tabela .= "<td class=''>" . $row['STATUS'] . "</td>";
                                                         $tabela .= "<td class=''>" . $row['FAIXA'] . "</td>";
                                                         $tabela .= "<td>" . number_format($row['PB'], 0, '', '.') . "</td>";
-                                                        $tabela .= "<td>" . number_format($row['COLOR'] , 0, '', '.') . "</td>";
-                                                        $tabela .= "<td>" . number_format($$row['MedidorTotal'], 0, '', '.') . "</td>";
-                                                        $tabela .= "<td>" . $row['VALORBASE'] . "</td>";
-                                                        $tabela .= "<td>" . $row['FATOR'] . "</td>";
-                                                        $tabela .= "<td>" . $row['MINIMO'] . "</td>";
-                                                        $tabela .= "<td>" . $row['BASICO'] . "</td>";
-                                                        $tabela .= "<td>" . $row['ALMEJADO'] . "</td>";
-                                                        $tabela .= "<td>" . $row['PALLET'] . "</td>";
+                                                        $tabela .= "<td>" . number_format($row['COLOR'], 0, '', '.') . "</td>";
+                                                        $tabela .= "<td>" . number_format($row['MedidorTotal'], 0, '', '.') . "</td>";
+                                                        /* $tabela .= "<td>" . $row['VALORBASE'] . "</td>";
+                                                        $tabela .= "<td>" . $row['FATOR'] . "</td>"; */
+                                                        $tabela .= "<td style= 'background-color: #ffff89;'>" . $row['AVISTA'] . "</td>";
+                                                        $tabela .= "<td style= 'background-color: #ffff89;'>" . $row['AVISTA3'] . "</td>";
+                                                        $tabela .= "<td style= 'background-color: #ffff89;'>" . $row['AVISTA6'] . "</td>";
+                                                        $tabela .= "<td style= 'background-color: #ffff89;'>" . $row['AVISTA9'] . "</td>";
+                                                        $tabela .= "<td style= 'background-color: #ade0ee;'>" . $row['BASICO'] . "</td>";
+                                                        $tabela .= "<td style= 'background-color: #ade0ee;'>" . $row['BASICO3'] . "</td>";
+                                                        $tabela .= "<td style= 'background-color: #ade0ee;'>" . $row['BASICO6'] . "</td>";
+                                                        $tabela .= "<td style= 'background-color: #ade0ee;'>" . $row['BASICO9'] . "</td>";
+                                                        $tabela .= "<td style='background-color: #e2f1bb;'>" . $row['ALMEJADO'] . "</td>";
+                                                        $tabela .= "<td style='background-color: #ffae69;'>" . $row['PALLET_AVISTA'] . "</td>";
+                                                        $tabela .= "<td style='background-color: #ffae69;'>" . $row['PALLET'] . "</td>";
                                                         $tabela .= "<td>" . $row['SITUACAO'] . "</td>";
+                                                        $tabela .= "<td>" . $row['CONTAINER'] . "</td>";
                                                         $tabela .= "<td>" . $row['ORCAMENTO'] . "</td>";
                                                         $tabela .= "<td>" . $row['CLIENTE'] . "</td>";
                                                         $tabela .= "<td>" . $row['VENDEDOR'] . "</td>";
@@ -358,11 +469,15 @@ ini_set('max_input_vars', 3000);
                                         </tbody>
                                 </table>
                 </form>
+
         </div>
         <div class="acoes-rodape">
                 <form action="../VW/cotacaoRec.php" method="POST">
                         <input class="input-rodape" name="codCotacao" type="text" placeholder="Recuperar Cotação">
                         <button class="btn-rodape">Gerar</button>
+                </form>
+                <form action="listar.php" method="POST">
+                        <button class="btn-listar">Listar</button>
                 </form>
                 <button class="btn-sair" onclick="location.href='../login.php'">Sair</button>
         </div>

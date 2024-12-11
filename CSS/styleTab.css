@@ -43,3 +43,64 @@ tbody td.fixed2 {
     background-color: white;
     z-index: 1;
 }
+
+
+
+/* filtros agrupados */
+
+.filter-container {
+    position: relative;
+    width: 100%;
+  }
+
+  .filter-input {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 5px;
+    box-sizing: border-box;
+    /* Para garantir que o input ocupe toda a largura disponível */
+  }
+
+  .dropdown {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ddd;
+    width: calc(100% - 10px);
+    /* Ajuste de largura para não cortar */
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10000;
+    /* Garantir que a lista fique na frente de tudo */
+    padding: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 5px;
+    /* Distância entre o input e a lista */
+  }
+
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+
+  .dropdown-item label {
+    margin-left: 5px;
+    cursor: pointer;
+  }
+
+  .apply-button {
+    display: block;
+    padding: 5px;
+    text-align: center;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 5px;
+    width: 100%;
+  }
+
+  .apply-button:hover {
+    background-color: #0056b3;
+  }

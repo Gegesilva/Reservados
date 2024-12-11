@@ -5,26 +5,28 @@ header('Content-type: text/html; charset=ISO-8895-1');
 include_once "../DB/conexaoSQL.php";
 include_once "../DB/filtros.php";
 include_once "../DB/func.php";
+error_reporting(0); // Desativa a exibição de todos os tipos de erros
+ini_set('display_errors', '0'); // Garante que erros não sejam exibidos no navegador
 
 validaUsuario($conn);
 
 $Vendedor = validaUsuario($conn);
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    /* $serie = $_POST['serie']; */
-    $estado = $_POST['estado'];
-    $pessoa = $_POST['pessoa'];
-    $consumo = $_POST['consumo'];
-    $condicao = $_POST['condicao'];
-    $tabelaCust = $_POST['tabela'];
-    $classificacao = $_POST['class'];
-    $clienteForm = $_POST['cliente'];
-    $cliente = $pessoa . ':' . $estado;
+/* $serie = $_POST['serie']; */
+$estado = $_POST['estado'];
+$pessoa = $_POST['pessoa'];
+$consumo = $_POST['consumo'];
+$condicao = $_POST['condicao'];
+$tabelaCust = $_POST['tabela'];
+$classificacao = $_POST['class'];
+$clienteForm = $_POST['cliente'];
+$cliente = $pessoa . ':' . $estado;
+$omitirSerie = $_POST['OmitirSerie'];
 
-    $obs = nl2br($_POST['obs']);
+$obs = nl2br($_POST['obs']);
 
-    $embalagem = $_POST['embalagem'];
-}
+$embalagem = $_POST['embalagem'];
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $series = explode(',', $_POST['selecionado']); // Converte a string em array
     /* print_r($series); */ // Exibe o array
@@ -104,6 +106,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
 } else {
     $rodarlog = false;
 }
+
+/* omitir campos se flag marcada */
+if($omitirSerie == '1'){
+    $clnSerie = "<th></th>";
+    $clnStatus = "<th></th>";
+    $clnPB = "<th></th>";
+    $clnColor = "<th></th>";
+    $clnTotal = "<th></th>";
+}else{
+    $clnSerie = "<th>SÉRIE</th>";
+    $clnStatus = "<th class='currency'>STATUS</th>";
+    $clnPB = "<th>CONTADOR PB</th>";
+    $clnColor = "<th>CONTADOR COLOR</th>";
+    $clnTotal = "<th>CONTADOR TOTAL</th>";
+}
 ?>
 
 <!DOCTYPE html>
@@ -138,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                 <span><b>Classificação: </b> <?= $classificacao; ?></span>
             </div>
             <div>
-                <span><b>Cotação: </b> <?= $_SESSION['mostra_contador']; ?></span>
+                <span><b>Cotação: </b> <?= $_SESSION['mostra_contador']; ?> - <?= $tabelaCustCod ?></span>
             </div>
         </div>
     </div>
@@ -152,13 +169,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                     <tr>
                         <th>PRODUTO</th>
                         <th>REFERENCIA</th>
-                        <th>SÉRIE</th>
+                        <?=$clnSerie?>
                         <th>FAIXA</th>
                         <!-- <th class="currency">PREVISÃO CHEGADA</th> -->
-                        <th class="currency">STATUS</th>
-                        <th>CONTADOR PB</th>
-                        <th>CONTADOR COLOR</th>
-                        <th>CONTADOR TOTAL</th>
+                        <?=$clnStatus?>
+                        <?=$clnPB?>
+                        <?=$clnColor?>
+                        <?=$clnTotal?>
                         <th class="currency">VALOR FINAL</th>
                     </tr>
                     </tr>
@@ -189,7 +206,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                                         SELECT @EMPRESA = (SELECT top 1 TB02054_CODEMP FROM TB02054 WHERE TB02054_NUMSERIE = @SERIAL AND TB02054_QTPROD > TB02054_QTPRODS) 
                                         SELECT @PRODUTO = (select top 1 TB02054_PRODUTO FROM TB02054 WHERE TB02054_NUMSERIE = @SERIAL and TB02054_CODEMP = @EMPRESA AND TB02054_QTPROD > TB02054_QTPRODS) 
                                         SELECT @OPERACAO = '00'; --Fixo 00
-                                        SELECT @CONDICAO = '$codCond'; -- Lista suspensa da TB01014
+                                        SELECT @CONDICAO = '000'; -- Lista suspensa da TB01014
                                         SELECT @CLIENTE = '$definiCli'; -- F: ou J: + estado
                                         SELECT @VENDACONS = '$consumo'; --'N' REVENDA / 'S' CONSUMO
                                         SELECT @TABELA = '$tabelaCustCod'; 
@@ -236,7 +253,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                                         LEFT JOIN TB01010 ON TB01010_CODIGO = @PRODUTO
                                         LEFT JOIN TB02054 ON TB02054_PRODUTO = @PRODUTO AND TB02054_CODEMP = @EMPRESA AND TB02054_NUMSERIE = @SERIAL
                                         LEFT JOIN Equipamentos_Estoque_PHP ON SERIE = @SERIAL
-                                        LEFT JOIN GS_FAIXA ON CODIGO = TB02054_PRODUTO AND FAIXA = TB02054_FATOR
+                                        LEFT JOIN GS_FAIXA ON CODIGO = TB02054_PRODUTO AND GS_FAIXA.FAIXA = TB02054_FATOR
                                     ";
                         $stmt = sqlsrv_query($conn, $sql);
 
@@ -251,16 +268,49 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                                 /* Preenche código vazio */
                                 $CodProd = isset($row['CODPRODUTO']) ? $row['CODPRODUTO'] : 'INDISPONÍVEL';
 
+                                /* Define o nome ficticio dos status */
+                                $statusReal = $row['STATUS'];
+                                if (strpos($statusReal, 'PRONTA') !== false && strpos($statusReal, 'PALLET') == false) {
+                                    $statusFic = 'PRONTA';
+                                } elseif (strpos($statusReal, 'PRONTA') !== false && strpos($statusReal, 'PALLET') !== false) {
+                                    $statusFic = 'PRONTA PALLET';
+                                } elseif (strpos($statusReal, 'SUCATA') !== false) {
+                                    $statusFic = 'SUCATA';
+                                } elseif (strpos($statusReal, 'TRANSITO') !== false) {
+                                    $statusFic = 'TRANSITO';
+                                } else {
+                                    $statusFic = 'PRODUÇÃO';
+                                }
+
+                                /* omitir dados se flag marcada */
+                                if($omitirSerie == '1'){
+                                    $dbSerie = "<td> </td>";
+                                    $dbStatus = "<td> </td>";
+                                    $dbPB = "<td> </td>";
+                                    $dbColor = "<td> </td>";
+                                    $dbTotal = "<td> </td>";
+                                    $codStatus = "N";
+                                }else{
+                                    $dbSerie = "<td>  $row[SERIE] </td>";
+                                    $dbStatus = "<td>  $statusFic </td>";
+                                    $dbPB = "<td>  $row[MEDIDORPB] </td>";
+                                    $dbColor = "<td>  $row[MEDIDORCOLOR] </td>";
+                                    $dbTotal = "<td>  $row[MEDIDORTOTAL] </td>";
+                                    $codStatus = $row['CODSTATUS'];
+                                }
+
+
+
                                 $tabela .= "<tr>";
                                 $tabela .= "<td>" . $CodProd . "</td>";
                                 $tabela .= "<td>" . $row['REFERENCIA'] . "</td>";
-                                $tabela .= "<td>" . $row['SERIE'] . "</td>";
+                                $tabela .= $dbSerie;
                                 $tabela .= "<td>" . $row['FAIXA'] . "</td>";
+                                $tabela .= $dbStatus;
                                 /* $tabela .= "<td class='currency'>" . $row['PREVISAOCHEGADA'] . "</td>"; */
-                                $tabela .= "<td class='currency'>" . $row['STATUS'] . "</td>";
-                                $tabela .= "<td>" . $row['MEDIDORPB'] . "</td>";
-                                $tabela .= "<td>" . $row['MEDIDORCOLOR'] . "</td>";
-                                $tabela .= "<td>" . $row['MEDIDORTOTAL'] . "</td>";
+                                $tabela .= $dbPB;
+                                $tabela .= $dbColor;
+                                $tabela .= $dbTotal;
                                 $tabela .= "<td class='currency'>" . $row['VALORFINAL'] . "</td>";
                                 $tabela .= "</tr>";
                                 /* impede que seja salvo log ao atualizar a página */
@@ -277,7 +327,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
                                         $codClass,
                                         $CodProd,
                                         $row['REFERENCIA'],
-                                        $row['CODSTATUS'],
+                                        $codStatus,
                                         $row['MEDIDORPB'],
                                         $row['MEDIDORCOLOR'],
                                         $row['MEDIDORTOTAL'],
@@ -320,7 +370,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
     </div>
     <div class="obs">
         <P><b>OBS: </b> VALIDADE DA COTACÃO - 1 DIA</P>
-        &nbsp;<p> - ESSA COTACÃO NÃO RESERVA AS SÉRIES CONTIDAS NO MESMO. <?= $tabelaCustCod ?></p>
     </div>
     <div class="obs-ins">
         <P><?= $obs ?></p>

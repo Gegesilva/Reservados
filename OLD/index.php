@@ -3,6 +3,7 @@ header('Content-type: text/html; charset=ISO-8895-1');
 include_once "../DB/conexaoSQL.php";
 include_once "../DB/func.php";
 validaUsuario($conn);
+ini_set('max_input_vars', 3000);
 
 ?>
 <!DOCTYPE html>
@@ -25,7 +26,7 @@ validaUsuario($conn);
                         <h2>EQUIPAMENTOS EM ESTOQUE</h2>
                         <button class="btn-reset" id="resetBtn">Reset</button>
                 </div>
-                <form action="../vw/index.php" method="post">
+                <form id="form-princ" action="../vw/index.php" method="post">
                         <div class="form-group mb-3">
                                 <input type="text" class="form-control" id="globalFilter" placeholder="Filtro Geral">
                                 <button type="submit" class="btn-selecionados">COTAÇÃO</button>
@@ -47,6 +48,7 @@ validaUsuario($conn);
                                                 MARCA,
                                                 MODELO,
                                                 SERIE,
+                                                NOME FAIXA,
                                                 PB,
                                                 COLOR,
                                                 TOTAL MedidorTotal,
@@ -66,7 +68,8 @@ validaUsuario($conn);
                                                 CAST(DTCAD AS DATE) DTCAD,
                                                 CAST(DATACHEGADA AS DATE) DATACHEGADADATE
                                         FROM Equipamentos_Estoque_PHP
-                                        LEFT JOIN TB01010 ON TB01010_CODIGO = CODPRODUTO";
+                                        LEFT JOIN TB01010 ON TB01010_CODIGO = CODPRODUTO
+                                        LEFT JOIN GS_FAIXA ON FAIXA = FATOR AND CODIGO = CODPRODUTO";
                                 $stmt = sqlsrv_query($conn, $sql);
 
                                 ?>
@@ -101,6 +104,11 @@ validaUsuario($conn);
                                                                         class="form-control filter" data-column="4">
                                                         </th>
                                                         <th class="sticky fixed2 fixed-col fixed-col-2">SERIE <i
+                                                                        class="fa fa-sort" aria-hidden="true"></i><input
+                                                                        onclick="clicouNoFilho(event)" type="text"
+                                                                        class="form-control filter" data-column="5">
+                                                        </th>
+                                                        <th class="sticky fixed2 fixed-col fixed-col-2">FAIXA <i
                                                                         class="fa fa-sort" aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="5">
@@ -283,26 +291,46 @@ validaUsuario($conn);
 
                                                         $bonus2 = /* $comissaoVariavel + */ ($comissaoVariavel * $percentPont);
 
-                                                        /* Verifica se a serie esta na situação disponivel, se sim habilita a flag */
+                                                        /* Verifica se a serie esta na situação disponivel, se sim habilita a flag e input de valor */
 
                                                         $situacao = $row['SITUACAO'];
                                                         $inputRadio = "";
                                                         if ($situacao == 'DISPONIVEL') {
                                                                 $inputRadio = "<input id='flagSerie' type='checkbox' name='selecionado[]' value='$row[SERIE]'>";
+                                                                $inputVlr = "<input id='vlrembalagem' class='vlrembalagem' type='number' step='0.01' placeholder='Vlr Emb' name='vlrembalagem[]'>";
                                                         } else {
-                                                                $inputRadio = "";
+                                                                $primeiraLetra = substr($row['SITUACAO'], 0, 1);
+                                                                $inputRadio = "<span class='R-reservado'>$primeiraLetra</span>";
+                                                                $inputVlr = "";
                                                         }
+
+                                                        /* Define o nome ficticio dos status */
+                                                        $statusReal = $row['STATUS'];
+                                                        if(strpos($statusReal, 'PRONTA') !== false && strpos($statusReal, 'PALLET') == false){
+                                                                $statusFic = 'PRONTA';
+                                                        }elseif(strpos($statusReal, 'PRONTA') !== false && strpos($statusReal, 'PALLET') !== false){
+                                                                $statusFic = 'PRONTA PALLET';
+                                                        }elseif(strpos($statusReal, 'SUCATA') !== false){
+                                                                $statusFic = 'SUCATA';
+                                                        }elseif(strpos($statusReal, 'TRANSITO') !== false){
+                                                                $statusFic = 'TRANSITO';
+                                                        }else{
+                                                                $statusFic = 'PRODUÇÃO';
+                                                        }
+
+                                                        
 
                                                         $tabela .= "<tr>";
                                                         $tabela .= "<td class=''>" . $row['CONTAINER'] . "</td>";
                                                         $tabela .= "<td class=''>" . $row['DATACHEGADA'] . "</td>";
-                                                        $tabela .= "<td class=''>" . $row['STATUS'] . "</td>";
+                                                        $tabela .= "<td class=''>" . $statusFic . "</td>";
                                                         $tabela .= "<td class=''>" . $row['MARCA'] . "</td>";
                                                         $tabela .= "<td class='sticky fixed fixed-col'>" . $row['MODELO'] . "</td>";
-                                                        $tabela .= "<td class='sticky fixed2 fixed-col fixed-col-2'>$inputRadio " . $row['SERIE'] . "</td>";
-                                                        $tabela .= "<td>" . $row['PB'] . "</td>";
-                                                        $tabela .= "<td>" . $row['COLOR'] . "</td>";
-                                                        $tabela .= "<td>" . $row['MedidorTotal'] . "</td>";
+                                                        $tabela .= "<td class='sticky fixed2 fixed-col fixed-col-2'>$inputRadio " . $row['SERIE'] . "$inputVlr</td>";
+                                                        $tabela .= "<td class=''>" . $row['FAIXA'] . "</td>";
+                                                        $tabela .= "<td>" . number_format($row['PB'], 0, '', '.') . "</td>";
+                                                        $tabela .= "<td>" . number_format($row['COLOR'] , 0, '', '.') . "</td>";
+                                                        $tabela .= "<td>" . number_format($$row['MedidorTotal'], 0, '', '.') . "</td>";
                                                         $tabela .= "<td>" . $row['VALORBASE'] . "</td>";
                                                         $tabela .= "<td>" . $row['FATOR'] . "</td>";
                                                         $tabela .= "<td>" . $row['MINIMO'] . "</td>";
@@ -329,7 +357,6 @@ validaUsuario($conn);
                                                 ?>
                                         </tbody>
                                 </table>
-
                 </form>
         </div>
         <div class="acoes-rodape">
@@ -344,6 +371,7 @@ validaUsuario($conn);
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="../JS/filtros.js" charset="utf-8"></script>
+        <script src="../JS/forms.js" charset="utf-8"></script>
 </body>
 
 </html>

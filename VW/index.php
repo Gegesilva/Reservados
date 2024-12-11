@@ -4,6 +4,8 @@ session_start();
 include_once "../DB/conexaoSQL.php";
 include_once "../DB/filtros.php";
 ini_set('max_input_vars', 3000);
+error_reporting(0); // Desativa a exibição de todos os tipos de erros
+ini_set('display_errors', '0'); // Garante que erros não sejam exibidos no navegador
 
 /* atualiza variavel para que o log seja gerado em result.php */
 $_SESSION['funcao_executada'] = false;
@@ -45,6 +47,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Coloca os valores dentro de aspas simples e os separa por vírgula
         /* $vlrembalagemInseridos = implode(",", $vlrembalagem); */
     }
+}
+
+/* valor da embalagem fixo 0 caso não seja preechida */
+if ($vlrembalagem == NULL) {
+    $vlrembalagem = 0;
 }
 ?>
 
@@ -145,7 +152,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="form-input">
                     <label for="class">Embalagem *</label>
                     <div class="custom-select">
-                        <input type="number" step="0.01" name="embalagem" class="class" id="embalagemClass" value="<?=$vlrembalagem?>" required>
+                        <input type="number" step="0.01" name="embalagem" class="class" id="embalagemClass"
+                            value="<?= $vlrembalagem ?>" required>
                     </div>
                 </div>
             </div>
@@ -168,6 +176,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <textarea type="text" name="obs" class="cliente" id="selectObs"></textarea>
                     </div>
                 </div>
+            </div>
+            <div class="flag-omitir">
+                <input type="checkbox" class="OmitirSerie" name="OmitirSerie" value="1">Omitir Seriais
             </div>
             <div class="btn-index">
                 <input type="hidden" name="trava" id="trava" value="1">
