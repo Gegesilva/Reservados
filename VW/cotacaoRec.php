@@ -296,18 +296,18 @@ if ($status == 'N') {
                         <th></th>
                         <th id="totalValorFinal" class="currency">R$ 0,00</th>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <th colspan="6">Valor Embalagem</th>
                         <th></th>
                         <th></th>
-                        <th class="currency" id="ValorEmbalagem"><?= $embalagem ?></th>
+                        <th class="currency" id="ValorEmbalagem"> $embalagem ?></th>
                     </tr>
                     <tr>
                         <th colspan="6">Total Geral</th>
                         <th></th>
                         <th></th>
                         <th class="currency" id="TotalGeral">R$ 0,00</th>
-                    </tr>
+                    </tr> -->
                 </tfoot>
                 </tfoot>
             </table>

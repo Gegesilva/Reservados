@@ -32,8 +32,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     /* print_r($series); */ // Exibe o array
 }
 
-/* contar quantas series dentro do array */
+/* contar quantas series dentro do array e divide pelo numero de produtos*/
 $qtdeProdutos = count($series);
+$vlrembalagemProd = $embalagem / $qtdeProdutos;
 
 $serieEnvio = urlencode(serialize($series));
 
@@ -217,7 +218,7 @@ if($omitirSerie == '1'){
                                         
                                         select 
                                         
-                                        @VALORBASE = (VALOR * (SELECT TOP 1 TB02054_FATOR FROM TB02054 WHERE TB02054_PRODUTO = @PRODUTO AND TB02054_CODEMP = @EMPRESA AND TB02054_NUMSERIE = @SERIAL)) + ($embalagem / $qtdeProdutos)
+                                        @VALORBASE = (VALOR * (SELECT TOP 1 TB02054_FATOR FROM TB02054 WHERE TB02054_PRODUTO = @PRODUTO AND TB02054_CODEMP = @EMPRESA AND TB02054_NUMSERIE = @SERIAL)) + $vlrembalagemProd
                                         
                                         from FT02002(@EMPRESA,@PRODUTO,@OPERACAO,@CONDICAO,@CLIENTE,@VENDACONS,@TABELA,@VALORINICIAL)
                                         
@@ -337,7 +338,7 @@ if($omitirSerie == '1'){
                                         $row['VALORFINALNUM'],
                                         $tabelaCustCod,
                                         $obs,
-                                        $embalagem,
+                                        $vlrembalagemProd,
                                         $row['FAIXA']
                                     );
                                 }
