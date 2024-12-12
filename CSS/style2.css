@@ -105,6 +105,14 @@ h2{
     background-color: rgb(240, 221, 78);
     margin-left: 1rem;
   }
+  .btn-exp{
+    display: inline-block; /* Mantém os dois elementos agrupados */
+    border-radius: 20px;
+    border: none;
+    box-shadow: 1px 2px white;
+    background-color: rgb(54, 248, 79);
+    margin-left: 1rem;
+  }
   
   .input-rodape {
     margin-right: 10px; /* Espaçamento entre o input e o botão */

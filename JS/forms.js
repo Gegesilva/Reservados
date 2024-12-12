@@ -12,3 +12,19 @@ document.getElementById('form-princ').addEventListener('submit', function(event)
         }
     }
 });
+
+/* Exportar para excel */
+    var usuario = document.getElementById('usuario').value;
+    function exportTableToExcel() {
+        // Clonar a tabela original
+        const originalTable = document.getElementById('sortableTable');
+        const cloneTable = originalTable.cloneNode(true);
+    
+        // Remover elementos indesejados do clone
+        const buttons = cloneTable.querySelectorAll('.dropdown-item');
+        buttons.forEach(button => button.parentElement.remove()); // Remove células que contêm input
+    
+        // Exportar tabela limpa
+        const workbook = XLSX.utils.table_to_book(cloneTable, { sheet: "Sheet1" });
+        XLSX.writeFile(workbook, 'COTAÇÔES - '+usuario+'.xlsx');
+    }

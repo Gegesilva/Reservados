@@ -482,15 +482,18 @@ strtoupper($usuario);
                         <button class="btn-rodape">Gerar</button>
                 </form>
                 <form action="listar.php" method="POST">
-                        <input type="hidden" name="usuario" value="<?= $usuario?>">
+                        <input type="hidden" name="usuario" id="usuario" value="<?= $usuario?>">
                         <button class="btn-listar">Listar</button>
+                       
                 </form>
+                <button class="btn-exp" onclick="exportTableToExcel()">.xlsx</button>
                 <button class="btn-sair" onclick="location.href='../login.php'">Sair</button>
         </div>
         </div>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
         <script src="../JS/filtros.js" charset="utf-8"></script>
         <script src="../JS/forms.js" charset="utf-8"></script>
 </body>

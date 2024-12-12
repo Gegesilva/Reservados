@@ -78,7 +78,7 @@ function clicouNoFilho(event) {
 
 
 let filters = [[], [], []];
-
+var columnIndex;
     // Função que mostra o dropdown (lista suspensa) de filtros para cada coluna
     function showDropdown(columnIndex) {
       const input = document.getElementById(`filter${columnIndex}`);
@@ -207,7 +207,6 @@ let filters = [[], [], []];
         }
       });
     });
-
 
 
 
