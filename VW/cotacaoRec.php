@@ -324,7 +324,7 @@ if ($status == 'N') {
         <!-- <button type="submit" class="voltar-btn-form">Voltar</button>
             <input name="selecionado[]" type="hidden" value="<?= $selecionados ?>"> -->
 
-        <button class="voltar-btn-form" onClick="window.location='../VW2/index.php';" type="submit"
+        <button class="voltar-btn-form" onClick="voltar()" type="submit"
             class="voltar-btn-form">Voltar</button>
     </div>
     <input type="hidden" id="urlOS" value="<?= $url ?>/save.php">

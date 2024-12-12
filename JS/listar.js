@@ -1,138 +1,162 @@
 const applyFiltersButton = document.getElementById("applyFilters");
-        const resetFiltersButton = document.getElementById("resetFilters");
-        const startDateInput = document.getElementById("startDate");
-        const endDateInput = document.getElementById("endDate");
-        const filterClientInput = document.getElementById("filterClient");
-        const filterCodeInput = document.getElementById("filterCode");
-        const table = document.getElementById("dataTable");
-        const loadingScreen = document.getElementById("loadingScreen");
+const resetFiltersButton = document.getElementById("resetFilters");
+const startDateInput = document.getElementById("startDate");
+const endDateInput = document.getElementById("endDate");
+const filterClientInput = document.getElementById("filterClient");
+const filterCodeInput = document.getElementById("filterCode");
+const table = document.getElementById("dataTable");
+const loadingScreen = document.getElementById("loadingScreen");
 
-        function showLoadingScreen() {
-            loadingScreen.style.display = "block";
-        }
+function showLoadingScreen() {
+  loadingScreen.style.display = "block";
+}
 
-        function hideLoadingScreen() {
-            loadingScreen.style.display = "none";
-        }
+function hideLoadingScreen() {
+  loadingScreen.style.display = "none";
+}
 
-        function applyFilters() {
-            showLoadingScreen();
+// Função para converter data do formato yyyy-MM-dd para dd/mm/yyyy
+function formatDateToDDMMYYYY(dateString) {
+  const [year, month, day] = dateString.split("-");
+  return `${day}/${month}/${year}`;
+}
 
-            const startDate = startDateInput.value;
-            const endDate = endDateInput.value;
-            const filterClient = filterClientInput.value.toLowerCase();
-            const filterCode = filterCodeInput.value.toLowerCase();
+// Função para converter data do formato yyyy-MM-dd para objeto Date
+function parseDate(dateString) {
+  const [year, month, day] = dateString.split("-");
+  return new Date(year, month - 1, day);
+}
 
-            const rows = table.querySelectorAll("tbody tr");
-            rows.forEach(row => {
-                const date = row.cells[1].innerText;
-                const client = row.cells[2].innerText.toLowerCase();
-                const code = row.cells[0].innerText.toLowerCase();
+function applyFilters() {
+  showLoadingScreen();
 
-                let showRow = true;
+  const startDate = startDateInput.value ? parseDate(startDateInput.value) : null;
+  const endDate = endDateInput.value ? parseDate(endDateInput.value) : null;
+  const filterClient = filterClientInput.value.toLowerCase();
+  const filterCode = filterCodeInput.value.toLowerCase();
 
-                // Filtro por período de data
-                if (startDate && new Date(date) < new Date(startDate)) {
-                    showRow = false;
-                }
-                if (endDate && new Date(date) > new Date(endDate)) {
-                    showRow = false;
-                }
+  const rows = table.querySelectorAll("tbody tr");
+  rows.forEach(row => {
+    const dateText = row.cells[1].innerText; // Data no formato dd/mm/yyyy
+    const client = row.cells[2].innerText.toLowerCase();
+    const code = row.cells[0].innerText.toLowerCase();
 
-                // Filtro por cliente
-                if (filterClient && !client.includes(filterClient)) {
-                    showRow = false;
-                }
+    let showRow = true;
 
-                // Filtro por código
-                if (filterCode && !code.includes(filterCode)) {
-                    showRow = false;
-                }
+    // Filtro por período de data
+    if (startDate || endDate) {
+      const rowDate = parseDate(row.cells[1].dataset.date); // Data no formato yyyy-MM-dd armazenada no dataset
+      if (startDate && rowDate < startDate) {
+        showRow = false;
+      }
+      if (endDate && rowDate > endDate) {
+        showRow = false;
+      }
+    }
 
-                row.style.display = showRow ? "" : "none";
-            });
+    // Filtro por cliente
+    if (filterClient && !client.includes(filterClient)) {
+      showRow = false;
+    }
 
-            setTimeout(hideLoadingScreen, 500); // Simula carregamento
-        }
+    // Filtro por código
+    if (filterCode && !code.includes(filterCode)) {
+      showRow = false;
+    }
 
-        function resetFilters() {
-            showLoadingScreen();
+    row.style.display = showRow ? "" : "none";
+  });
 
-            // Limpa os valores dos inputs
-            startDateInput.value = "";
-            endDateInput.value = "";
-            filterClientInput.value = "";
-            filterCodeInput.value = "";
+  setTimeout(hideLoadingScreen, 500); // Simula carregamento
+}
 
-            // Mostra todas as linhas da tabela
-            const rows = table.querySelectorAll("tbody tr");
-            rows.forEach(row => {
-                row.style.display = "";
-            });
+function resetFilters() {
+  showLoadingScreen();
 
-            setTimeout(hideLoadingScreen, 500); // Simula carregamento
-        }
+  // Limpa os valores dos inputs
+  startDateInput.value = "";
+  endDateInput.value = "";
+  filterClientInput.value = "";
+  filterCodeInput.value = "";
 
-        applyFiltersButton.addEventListener("click", applyFilters);
-        resetFiltersButton.addEventListener("click", resetFilters);
+  // Mostra todas as linhas da tabela
+  const rows = table.querySelectorAll("tbody tr");
+  rows.forEach(row => {
+    row.style.display = "";
+  });
 
-        // Adiciona evento de clique duplo na coluna "Código"
-        table.addEventListener("dblclick", (event) => {
-            const target = event.target;
+  setTimeout(hideLoadingScreen, 500); // Simula carregamento
+}
 
-            // Verifica se o elemento clicado é uma célula da coluna "Código"
-            if (target.tagName === "TD" && target.cellIndex === 0) {
-                const codCotacao = target.innerText;
+applyFiltersButton.addEventListener("click", applyFilters);
+resetFiltersButton.addEventListener("click", resetFilters);
 
-                // Redireciona para a nova página usando POST
-                const form = document.createElement("form");
-                form.method = "POST";
-                form.action = "../VW/cotacaoRec.php";
+// Preenche a tabela com o formato dd/mm/yyyy ao carregar
+document.querySelectorAll("tbody tr").forEach(row => {
+  const dateCell = row.cells[1];
+  const originalDate = dateCell.innerText; // Supondo formato yyyy-MM-dd
+  dateCell.dataset.date = originalDate; // Armazena a data original no dataset
+  dateCell.innerText = formatDateToDDMMYYYY(originalDate); // Formata para dd/mm/yyyy
+});
 
-                const input = document.createElement("input");
-                input.type = "hidden";
-                input.name = "codCotacao";
-                input.value = codCotacao;
+// Adiciona evento de clique duplo na coluna "Código"
+table.addEventListener("dblclick", (event) => {
+    const target = event.target;
 
-                form.appendChild(input);
-                document.body.appendChild(form);
-                form.submit();
-            }
-        });
+    // Verifica se o elemento clicado é uma célula da coluna "Código"
+    if (target.tagName === "TD" && target.cellIndex === 0) {
+      const codCotacao = target.innerText;
 
-        /* Ordena a tabela */
-        const table2 = document.getElementById("dataTable");
+      // Redireciona para a nova página usando POST
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = "../VW/cotacaoRec.php";
 
-        // Adiciona evento de clique aos cabeçalhos
-        table2.querySelectorAll("th").forEach((header, index) => {
-          header.addEventListener("click", () => sortTable(index, header.dataset.type));
-        });
-      
-        function sortTable(columnIndex, type) {
-          const tbody = table2.querySelector("tbody");
-          const rows = Array.from(tbody.querySelectorAll("tr"));
-      
-          // Alterna a ordem de classificação
-          const isAscending = table2.dataset.sortOrder !== "asc";
-          table2.dataset.sortOrder = isAscending ? "asc" : "desc";
-      
-          rows.sort((rowA, rowB) => {
-            const cellA = rowA.cells[columnIndex].innerText.trim();
-            const cellB = rowB.cells[columnIndex].innerText.trim();
-      
-            if (type === "numeric") {
-              return isAscending ? cellA - cellB : cellB - cellA;
-            } else if (type === "date") {
-              return isAscending
-                ? new Date(cellA) - new Date(cellB)
-                : new Date(cellB) - new Date(cellA);
-            } else if (type === "text") {
-              return isAscending
-                ? cellA.localeCompare(cellB)
-                : cellB.localeCompare(cellA);
-            }
-          });
-      
-          // Reanexa as linhas ordenadas ao tbody
-          rows.forEach(row => tbody.appendChild(row));
-        }
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = "codCotacao";
+      input.value = codCotacao;
+
+      form.appendChild(input);
+      document.body.appendChild(form);
+      form.submit();
+    }
+  });
+
+
+
+  const table2 = document.getElementById("dataTable");
+
+  // Adiciona evento de clique aos cabeçalhos
+  table.querySelectorAll("th").forEach((header, index) => {
+    header.addEventListener("click", () => sortTable(index, header.dataset.type));
+  });
+
+  function sortTable(columnIndex, type) {
+    const tbody = table2.querySelector("tbody");
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+
+    // Alterna a ordem de classificação
+    const isAscending = table2.dataset.sortOrder !== "asc";
+    table2.dataset.sortOrder = isAscending ? "asc" : "desc";
+
+    rows.sort((rowA, rowB) => {
+      const cellA = rowA.cells[columnIndex].innerText.trim();
+      const cellB = rowB.cells[columnIndex].innerText.trim();
+
+      if (type === "numeric") {
+        return isAscending ? cellA - cellB : cellB - cellA;
+      } else if (type === "date") {
+        return isAscending
+          ? new Date(cellA) - new Date(cellB)
+          : new Date(cellB) - new Date(cellA);
+      } else if (type === "text") {
+        return isAscending
+          ? cellA.localeCompare(cellB)
+          : cellB.localeCompare(cellA);
+      }
+    });
+
+    // Reanexa as linhas ordenadas ao tbody
+    rows.forEach(row => tbody.appendChild(row));
+  }

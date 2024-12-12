@@ -7,6 +7,11 @@ ini_set('max_input_vars', 3000);
 error_reporting(0); // Desativa a exibição de todos os tipos de erros
 ini_set('display_errors', '0'); // Garante que erros não sejam exibidos no navegador
 
+/* pega o nome do usuario para passar para o modulo listar */
+session_start();
+$usuario = $_SESSION["username"];
+strtoupper($usuario);
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -477,6 +482,7 @@ ini_set('display_errors', '0'); // Garante que erros não sejam exibidos no nave
                         <button class="btn-rodape">Gerar</button>
                 </form>
                 <form action="listar.php" method="POST">
+                        <input type="hidden" name="usuario" value="<?= $usuario?>">
                         <button class="btn-listar">Listar</button>
                 </form>
                 <button class="btn-sair" onclick="location.href='../login.php'">Sair</button>

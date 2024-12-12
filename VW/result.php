@@ -321,7 +321,7 @@ if($omitirSerie == '1'){
                                         $row['SERIE'],
                                         $definiCli,
                                         $consumo,
-                                        $Vendedor,
+                                        strtoupper($Vendedor),
                                         $pessoa,
                                         $codCond,
                                         $codClass,
