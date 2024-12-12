@@ -18,25 +18,19 @@ function calculateTotals() {
         totalValorFinal = 0;
         
 
-    document.querySelectorAll('tbody tr').forEach(row => {
-        /* totalValorBase += parseCurrency(row.cells[2].textContent);
-        totalValorIPI += parseCurrency(row.cells[3].textContent);
-        totalST += parseCurrency(row.cells[4].textContent);
-        totalDifalST += parseCurrency(row.cells[5].textContent); */
-        totalValorFinal += parseCurrency(row.cells[8].textContent);
-    });
-
-    thEmbalagem = document.getElementById('ValorEmbalagem').textContent;
+        document.querySelectorAll('tbody tr').forEach(row => {
+            /* totalValorBase += parseCurrency(row.cells[2].textContent);
+            totalValorIPI += parseCurrency(row.cells[3].textContent);
+            totalST += parseCurrency(row.cells[4].textContent);
+            totalDifalST += parseCurrency(row.cells[5].textContent); */
+            totalValorFinal += parseCurrency(row.cells[8].textContent);
+        });
     
-    totalGeral = totalValorFinal + parseFloat(thEmbalagem);
-
-    /* document.getElementById('totalValorBase').textContent = formatToCurrency(totalValorBase);
-    document.getElementById('totalValorIPI').textContent = formatToCurrency(totalValorIPI);
-    document.getElementById('totalST').textContent = formatToCurrency(totalST);
-    document.getElementById('totalDifalST').textContent = formatToCurrency(totalDifalST); */
-    document.getElementById('totalValorFinal').textContent = formatToCurrency(totalValorFinal);
-    document.getElementById('ValorEmbalagem').textContent = formatToCurrency(thEmbalagem);
-    document.getElementById('TotalGeral').textContent = formatToCurrency(totalGeral);
+        /* document.getElementById('totalValorBase').textContent = formatToCurrency(totalValorBase);
+        document.getElementById('totalValorIPI').textContent = formatToCurrency(totalValorIPI);
+        document.getElementById('totalST').textContent = formatToCurrency(totalST);
+        document.getElementById('totalDifalST').textContent = formatToCurrency(totalDifalST); */
+        document.getElementById('totalValorFinal').textContent = formatToCurrency(totalValorFinal);
 }
 
 // Calcular totais ao carregar a página

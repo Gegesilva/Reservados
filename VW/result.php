@@ -32,6 +32,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     /* print_r($series); */ // Exibe o array
 }
 
+/* contar quantas series dentro do array */
+$qtdeProdutos = count($series);
+
 $serieEnvio = urlencode(serialize($series));
 
 /* Pega o codigo da condição pelo nome passado pelo input da lista */
@@ -214,7 +217,7 @@ if($omitirSerie == '1'){
                                         
                                         select 
                                         
-                                        @VALORBASE = VALOR * (SELECT TOP 1 TB02054_FATOR FROM TB02054 WHERE TB02054_PRODUTO = @PRODUTO AND TB02054_CODEMP = @EMPRESA AND TB02054_NUMSERIE = @SERIAL)
+                                        @VALORBASE = (VALOR * (SELECT TOP 1 TB02054_FATOR FROM TB02054 WHERE TB02054_PRODUTO = @PRODUTO AND TB02054_CODEMP = @EMPRESA AND TB02054_NUMSERIE = @SERIAL)) + ($embalagem / $qtdeProdutos)
                                         
                                         from FT02002(@EMPRESA,@PRODUTO,@OPERACAO,@CONDICAO,@CLIENTE,@VENDACONS,@TABELA,@VALORINICIAL)
                                         
@@ -343,6 +346,8 @@ if($omitirSerie == '1'){
                             print ($tabela);
                     }
                 }
+
+                echo $qtdeProdutos;
                 ?>
                 </tbody>
                 <tfoot>
@@ -352,18 +357,18 @@ if($omitirSerie == '1'){
                         <th></th>
                         <th id="totalValorFinal" class="currency">R$ 0,00</th>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <th colspan="6">Valor Embalagem</th>
                         <th></th>
                         <th></th>
-                        <th class="currency" id="ValorEmbalagem"><?= $embalagem ?></th>
-                    </tr>
-                    <tr>
+                        <th class="currency" id="ValorEmbalagem">/* $embalagem */ ?></th>
+                    </tr> -->
+                    <!-- <tr>
                         <th colspan="6">Total Geral</th>
                         <th></th>
                         <th></th>
                         <th class="currency" id="TotalGeral">R$ 0,00</th>
-                    </tr>
+                    </tr> -->
                 </tfoot>
             </table>
         </div>
