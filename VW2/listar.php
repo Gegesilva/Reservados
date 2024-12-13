@@ -51,7 +51,7 @@ $usuario = $_POST['usuario'];
             <button class="btn-aplicar" id="applyFilters">Aplicar</button>
             <button class="btn-resetar" id="resetFilters">Resetar</button>
         </div>
-        <button class="btn-voltar-lista" onclick="window.location.href='index.php'">voltar</button>
+        <button class="btn-voltar-lista" onclick="window.location.href='index.php'">Voltar</button>
     </div>
     </div>
     <div class="table-container">
