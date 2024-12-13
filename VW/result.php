@@ -112,13 +112,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['funcao_executada'] == fal
 }
 
 /* omitir campos se flag marcada */
-if($omitirSerie == '1'){
+if ($omitirSerie == '1') {
     $clnSerie = "<th></th>";
     $clnStatus = "<th></th>";
     $clnPB = "<th></th>";
     $clnColor = "<th></th>";
     $clnTotal = "<th></th>";
-}else{
+} else {
     $clnSerie = "<th>SÉRIE</th>";
     $clnStatus = "<th class='currency'>STATUS</th>";
     $clnPB = "<th>CONTADOR PB</th>";
@@ -173,13 +173,13 @@ if($omitirSerie == '1'){
                     <tr>
                         <th>PRODUTO</th>
                         <th>REFERENCIA</th>
-                        <?=$clnSerie?>
+                        <?= $clnSerie ?>
                         <th>FAIXA</th>
                         <!-- <th class="currency">PREVISÃO CHEGADA</th> -->
-                        <?=$clnStatus?>
-                        <?=$clnPB?>
-                        <?=$clnColor?>
-                        <?=$clnTotal?>
+                        <?= $clnStatus ?>
+                        <?= $clnPB ?>
+                        <?= $clnColor ?>
+                        <?= $clnTotal ?>
                         <th class="currency">VALOR FINAL</th>
                     </tr>
                     </tr>
@@ -287,14 +287,14 @@ if($omitirSerie == '1'){
                                 }
 
                                 /* omitir dados se flag marcada */
-                                if($omitirSerie == '1'){
+                                if ($omitirSerie == '1') {
                                     $dbSerie = "<td> </td>";
                                     $dbStatus = "<td> </td>";
                                     $dbPB = "<td> </td>";
                                     $dbColor = "<td> </td>";
                                     $dbTotal = "<td> </td>";
                                     $codStatus = "N";
-                                }else{
+                                } else {
                                     $dbSerie = "<td>  $row[SERIE] </td>";
                                     $dbStatus = "<td>  $statusFic </td>";
                                     $dbPB = "<td>  $row[MEDIDORPB] </td>";
@@ -374,8 +374,11 @@ if($omitirSerie == '1'){
             </table>
         </div>
     </div>
-    <div class="obs">
-        <P><b>OBS: </b> VALIDADE DA COTACÃO - 1 DIA</P>
+    <div class="obstotal">
+        <div class="obs">
+            <P><b>OBS: </b> VALIDADE DA COTACÃO - 1 DIA</P>
+            <P><?= $embalagem > 0 ? "Valores de embalagem inclusos." : "" ?></P>
+        </div>
     </div>
     <div class="obs-ins">
         <P><?= $obs ?></p>

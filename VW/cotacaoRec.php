@@ -313,8 +313,11 @@ if ($status == 'N') {
             </table>
         </div>
     </div>
-    <div class="obs">
-        <P><b>OBS: </b> VALIDADE DA COTACÃO - 1 DIA</P>
+    <div class="obstotal">
+        <div class="obs">
+            <P><b>OBS: </b> VALIDADE DA COTACÃO - 1 DIA</P>
+            <P><?= $embalagem > 0 ? "Valores de embalagem inclusos." : "" ?></P>
+        </div>
     </div>
     <div class="obs-ins">
         <P><?= $obs ?></p>

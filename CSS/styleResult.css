@@ -73,15 +73,23 @@ body {
 }
 
 .obs{
-    display: flex;
+    /* display: flex; */
     justify-content: center;
     color: red;
+    flex-wrap: wrap;
   }
 
   .obs-ins{
     display: flex;
     justify-content: center;
     color: black;
+  }
+
+  .obstotal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
   }
 
 .titulo{
