@@ -26,6 +26,7 @@ $omitirSerie = $_POST['OmitirSerie'];
 $obs = nl2br($_POST['obs']);
 
 $embalagem = $_POST['embalagem'];
+$vlrReadytorun = $_POST['readytorun'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $series = explode(',', $_POST['selecionado']); // Converte a string em array
@@ -35,6 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 /* contar quantas series dentro do array e divide pelo numero de produtos*/
 $qtdeProdutos = count($series);
 $vlrembalagemProd = $embalagem / $qtdeProdutos;
+$vlrReadytorunProd = $vlrReadytorun / $qtdeProdutos;
 
 $serieEnvio = urlencode(serialize($series));
 
@@ -218,7 +220,7 @@ if ($omitirSerie == '1') {
                                         
                                         select 
                                         
-                                        @VALORBASE = (VALOR * (SELECT TOP 1 TB02054_FATOR FROM TB02054 WHERE TB02054_PRODUTO = @PRODUTO AND TB02054_CODEMP = @EMPRESA AND TB02054_NUMSERIE = @SERIAL)) + $vlrembalagemProd
+                                        @VALORBASE = (VALOR * (SELECT TOP 1 TB02054_FATOR FROM TB02054 WHERE TB02054_PRODUTO = @PRODUTO AND TB02054_CODEMP = @EMPRESA AND TB02054_NUMSERIE = @SERIAL)) + $vlrembalagemProd + $vlrReadytorunProd
                                         
                                         from FT02002(@EMPRESA,@PRODUTO,@OPERACAO,@CONDICAO,@CLIENTE,@VENDACONS,@TABELA,@VALORINICIAL)
                                         
@@ -339,7 +341,8 @@ if ($omitirSerie == '1') {
                                         $tabelaCustCod,
                                         $obs,
                                         $vlrembalagemProd,
-                                        $row['FAIXA']
+                                        $row['FAIXA'],
+                                        $vlrReadytorunProd
                                     );
                                 }
                             }
@@ -378,6 +381,7 @@ if ($omitirSerie == '1') {
         <div class="obs">
             <P><b>OBS: </b> VALIDADE DA COTACÃO - 1 DIA</P>
             <P><?= $embalagem > 0 ? "Valores de embalagem inclusos." : "" ?></P>
+            <P><?= $vlrReadytorun > 0 ? "Valores de readytorun inclusos." : "" ?></P>
         </div>
     </div>
     <div class="obs-ins">

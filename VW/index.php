@@ -37,21 +37,34 @@ if ($serie) {
 }
 
 
-//Pega as series selecionadas
+//Pega as vlr da embalagem
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verifica se alguma célula foi selecionada
     if (isset($_POST['vlrembalagem']) && is_array($_POST['vlrembalagem'])) {
         // Recupera os valores das células selecionadas
         $vlrembalagem = array_sum($_POST['vlrembalagem']);
 
-        // Coloca os valores dentro de aspas simples e os separa por vírgula
-        /* $vlrembalagemInseridos = implode(",", $vlrembalagem); */
     }
 }
 
 /* valor da embalagem fixo 0 caso não seja preechida */
 if ($vlrembalagem == NULL) {
     $vlrembalagem = 0;
+}
+
+//Pega as vlr da readytorun
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Verifica se alguma célula foi selecionada
+    if (isset($_POST['readytorun']) && is_array($_POST['readytorun'])) {
+        // Recupera os valores das células selecionadas
+        $vlrReadytorun = array_sum($_POST['readytorun']);
+
+    }
+}
+
+/* valor da readytorun fixo 0 caso não seja preechida */
+if ($vlrReadytorun == NULL) {
+    $vlrReadytorun = 0;
 }
 ?>
 
@@ -159,13 +172,20 @@ if ($vlrembalagem == NULL) {
             </div>
             <div class="form-group">
                 <div class="form-input">
-                    <label for="class">Clientes (Toma lugar do estado se for selecionado)</label>
+                    <label for="class">Cliente</label>
                     <div class="custom-select">
                         <input type="text" name="cliente" class="cliente" id="selectCliente"
                             placeholder="Digite para filtrar" onkeyup="filterCliente()">
                         <div id="selectClienteLista" class="select-items">
                             <?php filtroCliente($conn); ?>
                         </div>
+                    </div>
+                </div>
+                <div class="form-input">
+                    <label for="class">Readytorun *</label>
+                    <div class="custom-select">
+                        <input type="number" step="0.01" name="readytorun" class="class" id=readytorunClass"
+                            value="<?= $vlrReadytorun ?>" required>
                     </div>
                 </div>
             </div>

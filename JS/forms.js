@@ -26,5 +26,5 @@ document.getElementById('form-princ').addEventListener('submit', function(event)
     
         // Exportar tabela limpa
         const workbook = XLSX.utils.table_to_book(cloneTable, { sheet: "Sheet1" });
-        XLSX.writeFile(workbook, 'COTAÇÔES - '+usuario+'.xlsx');
+        XLSX.writeFile(workbook, 'COTAÇÕES - '+usuario+'.xlsx');
     }

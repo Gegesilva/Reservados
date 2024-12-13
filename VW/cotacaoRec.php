@@ -33,6 +33,7 @@ $sql = "SELECT TOP 1 [CODIGO]
             ,[TABELA]
             ,[OBS]
             ,[VLREMBALAGEM]
+            ,[READYTORUN]
         FROM [dbo].[GS_COTACOES]
         WHERE CODIGO = '$codCotacao'
             ";
@@ -45,6 +46,7 @@ while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
     $classificacao = $row['CLASSIFICACAO'];
     $obs = $row['OBS'];
     $embalagem = $row['VLREMBALAGEM'];
+    $vlrReadtorun = $row['READYTORUN'];
     $status = $row['STATUS'];
 }
 
@@ -317,6 +319,7 @@ if ($status == 'N') {
         <div class="obs">
             <P><b>OBS: </b> VALIDADE DA COTACÃO - 1 DIA</P>
             <P><?= $embalagem > 0 ? "Valores de embalagem inclusos." : "" ?></P>
+            <P><?= $vlrReadtorun > 0 ? "Valores de readtorun inclusos." : "" ?></P>
         </div>
     </div>
     <div class="obs-ins">

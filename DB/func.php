@@ -83,7 +83,7 @@ function contador($conn)
     return $contador;
 }
 
-function insereLog($conn, $contador, $numSerie, $definiCli, $consumo, $Vendedor, $pessoa, $codCond, $codClass, $CodProd, $referencia, $status, $medPB, $medCOLOR, $medTOT, $vlrTOTAL, $tabela, $obs, $embalagem, $faixa)
+function insereLog($conn, $contador, $numSerie, $definiCli, $consumo, $Vendedor, $pessoa, $codCond, $codClass, $CodProd, $referencia, $status, $medPB, $medCOLOR, $medTOT, $vlrTOTAL, $tabela, $obs, $embalagem, $faixa, $readytorun)
 {
 
     $sql = "INSERT INTO [dbo].[GS_COTACOES]
@@ -107,6 +107,7 @@ function insereLog($conn, $contador, $numSerie, $definiCli, $consumo, $Vendedor,
                         ,[OBS]
                         ,[VLREMBALAGEM]
                         ,[FAIXA]
+                        ,[READYTORUN]
                         )
                     VALUES
                         ('$contador'
@@ -129,6 +130,7 @@ function insereLog($conn, $contador, $numSerie, $definiCli, $consumo, $Vendedor,
                         ,'$obs'
                         ,'$embalagem'
                         ,'$faixa'
+                        ,'$readytorun'
                         )
              ";
 

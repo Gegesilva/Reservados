@@ -58,29 +58,31 @@ $usuario = $_POST['usuario'];
         <table id="dataTable" class="table-container">
             <thead>
                 <tr>
-                    <th data-type="numeric">COTAÇÃO</th>
-                    <th data-type="date">DATA</th>
-                    <th data-type="text">CLIENTE</th>
-                    <th data-type="numeric">QUANTIDADE</th>
-                    <th data-type="numeric">VALOR TOTAL</th>
+                    <th style = "text-align:center;" data-type="numeric">COTAÇÃO</th>
+                    <th style = "text-align:center;" data-type="date">DATA</th>
+                    <th style = "text-align:center;" data-type="text">CLIENTE</th>
+                    <th style = "text-align:center;" data-type="numeric">QUANTIDADE</th>
+                    <th style = "text-align:center;" data-type="numeric">VLR EMBALAGEM</th>
+                    <th style = "text-align:center;" data-type="numeric">VALOR TOTAL</th>
                 </tr>
             </thead>
             <?php
             $sql = "SELECT 
-                CODIGO Cotacao,
-                FORMAT(CAST([DATA] AS DATE), 'yyyy-MM-dd') [Data],
-                ISNULL(TB01008_NOME, CLIENTE) NomeCli,
-                COUNT(NUMSERIE) QtProd,
-                FORMAT(SUM(VALORFINAL),'C','PT-BR') ValorTotal
+                        CODIGO Cotacao,
+                        FORMAT(CAST([DATA] AS DATE), 'yyyy-MM-dd') [Data],
+                        ISNULL(TB01008_NOME, CLIENTE) NomeCli,
+                        COUNT(NUMSERIE) QtProd,
+                        FORMAT(SUM(VALORFINAL),'C','PT-BR') ValorTotal,
+						FORMAT(SUM(VLREMBALAGEM),'C','PT-BR') vlrEmbalagem
 
-            FROM GS_COTACOES
-            LEFT JOIN TB01008 ON TB01008_CODIGO = CLIENTE
-            WHERE DATEDIFF(DAY,GETDATE(), DATA) <= 30
-            AND VENDEDOR = '$usuario'
-            GROUP BY CODIGO,
-                    CAST(DATA AS DATE),
-                    CLIENTE,
-                    TB01008_NOME";
+                    FROM GS_COTACOES
+                    LEFT JOIN TB01008 ON TB01008_CODIGO = CLIENTE
+                    WHERE DATEDIFF(DAY,GETDATE(), DATA) <= 30
+                    AND VENDEDOR = '$usuario'
+                    GROUP BY CODIGO,
+                            CAST(DATA AS DATE),
+                            CLIENTE,
+                            TB01008_NOME";
             $stmt = sqlsrv_query($conn, $sql);
             ?>
             <tbody>
@@ -89,11 +91,12 @@ $usuario = $_POST['usuario'];
 
                 while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                     $tabela .= "<tr>";
-                    $tabela .= "<td style='color: red; cursor: pointer; height: auto;'>" . $row['Cotacao'] . "</td>";
-                    $tabela .= "<td style='height: auto;'>" . $row['Data'] . "</td>";
-                    $tabela .= "<td style='height: auto;'>" . $row['NomeCli'] . "</td>";
-                    $tabela .= "<td style='height: auto;'>" . $row['QtProd'] . "</td>";
-                    $tabela .= "<td style='height: auto;'>" . $row['ValorTotal'] . "</td>";
+                    $tabela .= "<td style='color: red; cursor: pointer; text-align:center;'>" . $row['Cotacao'] . "</td>";
+                    $tabela .= "<td style='text-align:center;'>" . $row['Data'] . "</td>";
+                    $tabela .= "<td style='text-align:center;'>" . $row['NomeCli'] . "</td>";
+                    $tabela .= "<td style='text-align:center;'>" . $row['QtProd'] . "</td>";
+                    $tabela .= "<td style='text-align:center;'>" . $row['vlrEmbalagem'] . "</td>";
+                    $tabela .= "<td style='text-align:center;'>" . $row['ValorTotal'] . "</td>";
                     $tabela .= "</tr>";
                 }
                 print ($tabela);

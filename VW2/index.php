@@ -407,10 +407,12 @@ strtoupper($usuario);
                                                         if ($situacao == 'DISPONIVEL') {
                                                                 $inputRadio = "<input id='flagSerie' type='checkbox' name='selecionado[]' value='$row[SERIE]'>";
                                                                 $inputVlr = "<input id='vlrembalagem' class='vlrembalagem' type='number' step='0.01' placeholder='Vlr Emb' name='vlrembalagem[]'>";
+                                                                $inputReadytorun = "<input id='readytorun' class='vlrembalagem' type='number' step='0.01' placeholder='Readytorun' name='readytorun[]'>";
                                                         } else {
                                                                 $primeiraLetra = substr($row['SITUACAO'], 0, 1);
                                                                 $inputRadio = "<span class='R-reservado'>$primeiraLetra</span>";
                                                                 $inputVlr = "";
+                                                                $inputReadytorun = "";
                                                         }
 
                                                         /* Define o nome ficticio dos status */
@@ -433,7 +435,7 @@ strtoupper($usuario);
                                                         $tabela .= "<td>" . $row['DATACHEGADA'] . "</td>";
                                                         $tabela .= "<td class=''>" . $row['MARCA'] . "</td>";
                                                         $tabela .= "<td class='sticky fixed fixed-col'>" . $row['MODELO'] . "</td>";
-                                                        $tabela .= "<td class='sticky fixed2 fixed-col fixed-col-2'>$inputRadio " . $row['SERIE'] . "$inputVlr</td>";
+                                                        $tabela .= "<td class='sticky fixed2 fixed-col fixed-col-2'>$inputRadio " . $row['SERIE'] . "$inputVlr $inputReadytorun</td>";
                                                         $tabela .= "<td class=''>" . $row['STATUS'] . "</td>";
                                                         $tabela .= "<td class=''>" . $row['FAIXA'] . "</td>";
                                                         $tabela .= "<td>" . number_format($row['PB'], 0, '', '.') . "</td>";
