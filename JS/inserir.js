@@ -71,7 +71,7 @@ $('#form').submit(function(e){
       });
   });
 
-  /* Ação do botão voltar */
-function voltar() {
-    history.back();
-  }
+
+  function voltar() {
+    window.location.href = "faixa.php";
+}

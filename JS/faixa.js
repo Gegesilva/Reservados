@@ -6,19 +6,38 @@ document.getElementById('filtro-produto').addEventListener('keydown', function(e
     }
 });
 
-// Função para aplicar filtro
-function aplicarFiltro() {
-    const filtro = document.getElementById('filtro-produto').value.trim().toLowerCase(); // Valor do filtro (case insensitive)
+ // Aplicar filtro
+ function aplicarFiltro() {
+    const filtro = document.getElementById('filtro-produto').value.trim().toLowerCase();
     const linhas = document.querySelectorAll('#tabela-produtos tbody tr');
 
     linhas.forEach(linha => {
-        const valorProduto = linha.cells[0].innerText.toLowerCase(); // Texto da primeira célula
-        linha.style.display = valorProduto.includes(filtro) ? '' : 'none'; // Mostra ou oculta a linha
+        const valorProduto = linha.cells[0].innerText.toLowerCase();
+        linha.style.display = valorProduto.includes(filtro) ? '' : 'none';
     });
+
+    // Salvar o filtro no sessionStorage
+    sessionStorage.setItem('filtroProduto', document.getElementById('filtro-produto').value);
 }
+
+// Navegar para outra página
+/* function irParaOutraPagina() {
+    window.location.href = "inserir.php";
+} */
+
+// Restaurar estado ao carregar a página
+window.onload = function () {
+    const filtro = sessionStorage.getItem('filtroProduto');
+    if (filtro) {
+        document.getElementById('filtro-produto').value = filtro;
+        aplicarFiltro();
+    }
+};
+
 
 // Função para resetar filtro
 function resetarFiltro() {
+    sessionStorage.clear(); 
     document.getElementById('filtro-produto').value = '';
     const linhas = document.querySelectorAll('#tabela-produtos tbody tr');
     linhas.forEach(linha => linha.style.display = '');
@@ -97,3 +116,6 @@ function deletarLinha(botao) {
         console.log('Exclusão cancelada.');
     }
 }
+
+
+ 
