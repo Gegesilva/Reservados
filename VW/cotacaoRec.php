@@ -319,7 +319,7 @@ if ($status == 'N') {
         <div class="obs">
             <P><b>OBS: </b> VALIDADE DA COTACÃO - 1 DIA</P>
             <P><?= $embalagem > 0 ? "Valores de embalagem inclusos." : "" ?></P>
-            <P><?= $vlrReadtorun > 0 ? "Valores de readtorun inclusos." : "" ?></P>
+            <P><?= $vlrReadtorun > 0 ? "Valores de readytorun inclusos." : "" ?></P>
         </div>
     </div>
     <div class="obs-ins">

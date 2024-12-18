@@ -22,7 +22,7 @@ $usuario = $_POST['usuario'];
 
 <body>
 
-    <div id="loadingScreen">Carregando...</div>
+    <!-- <div id="loadingScreen">Carregando...</div> -->
 
     <div class="filter-container">
         <div class="div-int-filter">
