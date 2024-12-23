@@ -21,7 +21,7 @@ validaUsuarioFaixa($conn);
 </head>
 
 <body>
-    <h4 class="titulo-geral">Faixas</h4>
+    <h4 class="titulo-geral">FAIXAS</h4>
     <div class="filter-container">
         <div>
             <label for="filtro-produto">Produto:</label>

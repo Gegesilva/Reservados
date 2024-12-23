@@ -165,4 +165,10 @@ h2{
     font-weight: bold;
   }
   
- 
+ .qtdeSerie{
+    color: white;
+    margin-right: 1rem;
+ }
+ .div-reset{
+    float: right;
+ }

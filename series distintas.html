@@ -1,0 +1,59 @@
+
+<div id="distinctCountDisplay">Séries: 0</div>
+
+
+<script>
+function updateDistinctValueCount() {
+    const table = document.getElementById("sortableTable");
+    const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+
+    const uniqueValues = new Set(); // Conjunto para armazenar valores distintos
+
+    // Itera pelas linhas visíveis e coleta valores da quinta coluna
+    for (let i = 0; i < rows.length; i++) {
+        if (rows[i].style.display !== "none") {
+            const cell = rows[i].getElementsByTagName("td")[4]; // Quinta coluna (index 4)
+            if (cell) {
+                const value = cell.innerText.trim();
+                if (value) {
+                    uniqueValues.add(value); // Adiciona ao conjunto apenas se não for vazio
+                }
+            }
+        }
+    }
+
+    // Atualiza o número no HTML
+    const distinctCountElement = document.getElementById("distinctCountDisplay");
+    distinctCountElement.textContent = `Séries: ${uniqueValues.size}`;
+}
+
+// Exemplo de chamada da função após filtrar
+function applyFilters() {
+    const table = document.getElementById("sortableTable");
+    const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+
+    for (let i = 0; i < rows.length; i++) {
+        let showRow = true;
+
+        for (let columnIndex = 0; columnIndex < filters.length; columnIndex++) {
+            const cell = rows[i].getElementsByTagName("td")[columnIndex];
+            if (cell && filters[columnIndex]) {
+                const value = cell.innerText.trim();
+                if (filters[columnIndex].length > 0 && !filters[columnIndex].includes(value)) {
+                    showRow = false;
+                    break;
+                }
+            }
+        }
+
+        rows[i].style.display = showRow ? "" : "none";
+    }
+
+    // Atualiza o contador de valores distintos na quinta coluna
+    updateDistinctValueCount();
+}
+
+// Chama a função para garantir que o número seja atualizado inicialmente
+document.addEventListener("DOMContentLoaded", updateDistinctValueCount);
+
+</script>

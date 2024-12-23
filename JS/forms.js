@@ -28,3 +28,10 @@ document.getElementById('form-princ').addEventListener('submit', function(event)
         const workbook = XLSX.utils.table_to_book(cloneTable, { sheet: "Sheet1" });
         XLSX.writeFile(workbook, 'COTAÇÕES - '+usuario+'.xlsx');
     }
+
+
+
+
+
+    
+      

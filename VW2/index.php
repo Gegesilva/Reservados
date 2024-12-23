@@ -31,7 +31,10 @@ strtoupper($usuario);
         <div class="div-geral">
                 <div class="d-flex justify-content-between">
                         <h2>EQUIPAMENTOS EM ESTOQUE</h2>
-                        <button class="btn-reset" id="resetBtn">Reset</button>
+                        <div>
+                                <span id="rowCountDisplay" class="qtdeSerie"><b>Qtde itens:</b> 0</span>
+                                <button class="btn-reset" id="resetBtn">Reset</button>
+                        </div>
                 </div>
                 <form id="form-princ" action="../vw/index.php" method="post">
                         <div class="form-group mb-3">
@@ -81,7 +84,8 @@ strtoupper($usuario);
                                                 CODCLASSIFICACAO,
                                                 CODCLIENTE,
                                                 CAST(DTCAD AS DATE) DTCAD,
-                                                CAST(DATACHEGADA AS DATE) DATACHEGADADATE
+                                                CAST(DATACHEGADA AS DATE) DATACHEGADADATE,
+                                                STATUSOS
                                         FROM Equipamentos_Estoque_PHP
                                         LEFT JOIN TB01010 ON TB01010_CODIGO = CODPRODUTO
                                         LEFT JOIN GS_FAIXA ON GS_FAIXA.FAIXA = FATOR AND CODIGO = CODPRODUTO";
@@ -110,7 +114,8 @@ strtoupper($usuario);
                                                                                 aria-hidden="true"></i><input
                                                                                 onclick="clicouNoFilho(event)"
                                                                                 oninput="showDropdown(3)" id="filter3"
-                                                                                type="text" class="form-control filter filter-input"
+                                                                                type="text"
+                                                                                class="form-control filter filter-input"
                                                                                 data-column="2">
                                                                         <div class="dropdown" id="dropdown3">
                                                                         </div>
@@ -123,7 +128,8 @@ strtoupper($usuario);
                                                                                 aria-hidden="true"></i><input
                                                                                 onclick="clicouNoFilho(event)"
                                                                                 oninput="showDropdown(4)" id="filter4"
-                                                                                type="text" class="form-control filter filter-input"
+                                                                                type="text"
+                                                                                class="form-control filter filter-input"
                                                                                 data-column="3">
                                                                         <div class="dropdown" id="dropdown4">
                                                                         </div>
@@ -141,7 +147,7 @@ strtoupper($usuario);
                                                                         </div>
                                                                 </div>
                                                         </th> -->
-                                                         <th class="sticky  fixed2 fixed-col fixed-col-2">SÉRIE <i
+                                                        <th class="sticky  fixed2 fixed-col fixed-col-2">SÉRIE <i
                                                                         class="fa fa-sort" aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="4">
@@ -150,6 +156,11 @@ strtoupper($usuario);
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="5">
+                                                        </th>
+                                                        <th class="sticky ">STATUS OS <i class="fa fa-sort"
+                                                                        aria-hidden="true"></i><input
+                                                                        onclick="clicouNoFilho(event)" type="text"
+                                                                        class="form-control filter" data-column="6">
                                                         </th>
                                                         <!-- <th class="sticky filterAgrup ">
                                                                 <div class="filter-container">STATUS <i
@@ -175,26 +186,26 @@ strtoupper($usuario);
                                                                         </div>
                                                                 </div>
                                                         </th> -->
-                                                
+
                                                         <th class="sticky ">FAIXA <i class="fa fa-sort"
-                                                                        aria-hidden="true"></i><input
-                                                                        onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="6">
-                                                        </th>
-                                                        <th class="sticky">PB <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="7">
                                                         </th>
-                                                        <th class="sticky">COLOR <i class="fa fa-sort"
+                                                        <th class="sticky">PB <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="8">
                                                         </th>
-                                                        <th class="sticky">TOTAL <i class="fa fa-sort"
+                                                        <th class="sticky">COLOR <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
                                                                         class="form-control filter" data-column="9">
+                                                        </th>
+                                                        <th class="sticky">TOTAL <i class="fa fa-sort"
+                                                                        aria-hidden="true"></i><input
+                                                                        onclick="clicouNoFilho(event)" type="text"
+                                                                        class="form-control filter" data-column="10">
                                                         </th>
                                                         <!-- <th class="sticky">VALOR BASE <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
@@ -209,127 +220,140 @@ strtoupper($usuario);
                                                         <th class="sticky">A VISTA <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="10">
+                                                                        class="form-control filter" data-column="11">
                                                         </th>
                                                         <th class="sticky">A VISTA + 3% <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="11">
+                                                                        class="form-control filter" data-column="12">
                                                         </th>
                                                         <th class="sticky">A VISTA + 6% <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="12">
+                                                                        class="form-control filter" data-column="13">
                                                         </th>
                                                         <th class="sticky">A VISTA + 9% <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="13">
+                                                                        class="form-control filter" data-column="14">
                                                         </th>
                                                         <th class="sticky">BASICO <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="14">
+                                                                        class="form-control filter" data-column="15">
                                                         </th>
                                                         <th class="sticky">BASICO + 3% <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="15">
+                                                                        class="form-control filter" data-column="16">
                                                         </th>
                                                         <th class="sticky">BASICO + 6% <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="16">
+                                                                        class="form-control filter" data-column="17">
                                                         </th>
                                                         <th class="sticky">BASICO + 9% <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="17">
+                                                                        class="form-control filter" data-column="18">
                                                         </th>
                                                         <th class="sticky">ALMEJADO <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="18">
+                                                                        class="form-control filter" data-column="19">
                                                         </th>
                                                         <th class="sticky">PALLET A VISTA <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="19">
+                                                                        class="form-control filter" data-column="20">
                                                         </th>
                                                         <th class="sticky">PALLET <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="20">
+                                                                        class="form-control filter" data-column="21">
                                                         </th>
                                                         <th class="sticky">SITUAÇÃO <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="21">
+                                                                        class="form-control filter" data-column="22">
                                                         </th>
                                                         <th class="sticky">CONTAINER <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="22">
+                                                                        class="form-control filter" data-column="23">
                                                         </th>
                                                         <th class="sticky">ORCAMENTO <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="23">
+                                                                        class="form-control filter" data-column="24">
                                                         </th>
-                                                        <th class="sticky">CLIENTE <i class="fa fa-sort"
+                                                        <!-- <th class="sticky">CLIENTE <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="24">
+                                                                        class="form-control filter" data-column="25">
+                                                        </th> -->
+                                                        <th class="sticky filterAgrup">
+                                                                <div class="filter-container">CLIENTE <i
+                                                                                class="fa fa-sort"
+                                                                                aria-hidden="true"></i><input
+                                                                                onclick="clicouNoFilho(event)"
+                                                                                oninput="showDropdown(26)" id="filter26"
+                                                                                type="text"
+                                                                                class="form-control filter filter-input"
+                                                                                data-column="25">
+                                                                        <div class="dropdown" id="dropdown26">
+                                                                        </div>
+                                                                </div>
                                                         </th>
                                                         <th class="sticky">VENDEDOR <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="25">
+                                                                        class="form-control filter" data-column="26">
                                                         </th>
                                                         <th class="sticky">CLASSIFICAÇÃO <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="26">
+                                                                        class="form-control filter" data-column="27">
                                                         </th>
                                                         <th class="sticky">OBS PEDIDO <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="27">
+                                                                        class="form-control filter" data-column="28">
                                                         </th>
                                                         <th class="sticky">OBS TECNICAS <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="28">
+                                                                        class="form-control filter" data-column="29">
                                                         </th>
                                                         <th class="sticky">NOTA <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="29">
+                                                                        class="form-control filter" data-column="30">
                                                         </th>
                                                         <th class="sticky">LOCAL <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="30">
+                                                                        class="form-control filter" data-column="31">
                                                         </th>
                                                         <th class="sticky">COM VAR <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="31">
+                                                                        class="form-control filter" data-column="32">
                                                         </th>
                                                         <th class="sticky">COM FIX <i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="32">
+                                                                        class="form-control filter" data-column="33">
                                                         </th>
                                                         <th class="sticky">BONUS 1<i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="33">
+                                                                        class="form-control filter" data-column="34">
                                                         </th>
                                                         <th class="sticky">BONUS 2<i class="fa fa-sort"
                                                                         aria-hidden="true"></i><input
                                                                         onclick="clicouNoFilho(event)" type="text"
-                                                                        class="form-control filter" data-column="34">
+                                                                        class="form-control filter" data-column="35">
                                                         </th>
                                                 </tr>
                                         </thead>
@@ -437,6 +461,7 @@ strtoupper($usuario);
                                                         $tabela .= "<td class='sticky fixed fixed-col'>" . $row['MODELO'] . "</td>";
                                                         $tabela .= "<td class='sticky fixed2 fixed-col fixed-col-2'>$inputRadio " . $row['SERIE'] . "$inputVlr $inputReadytorun</td>";
                                                         $tabela .= "<td class=''>" . $row['STATUS'] . "</td>";
+                                                        $tabela .= "<td class=''>" . $row['STATUSOS'] . "</td>";
                                                         $tabela .= "<td class=''>" . $row['FAIXA'] . "</td>";
                                                         $tabela .= "<td>" . number_format($row['PB'], 0, '', '.') . "</td>";
                                                         $tabela .= "<td>" . number_format($row['COLOR'], 0, '', '.') . "</td>";
@@ -484,9 +509,9 @@ strtoupper($usuario);
                         <button class="btn-rodape">Gerar</button>
                 </form>
                 <form action="listar.php" method="POST">
-                        <input type="hidden" name="usuario" id="usuario" value="<?= $usuario?>">
+                        <input type="hidden" name="usuario" id="usuario" value="<?= $usuario ?>">
                         <button class="btn-listar">Listar</button>
-                       
+
                 </form>
                 <button class="btn-exp" onclick="exportTableToExcel()">.xlsx</button>
                 <button class="btn-sair" onclick="location.href='../login.php'">Sair</button>

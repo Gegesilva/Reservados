@@ -160,19 +160,3 @@ table.addEventListener("dblclick", (event) => {
     // Reanexa as linhas ordenadas ao tbody
     rows.forEach(row => tbody.appendChild(row));
   }
-
-
-  /* adiciona a função enter para filtrar */
-  function addEnterListener(elementId) {
-    document.getElementById(elementId).addEventListener('keydown', function(event) {
-      if (event.key === 'Enter') { // Verifica se a tecla pressionada foi Enter
-          event.preventDefault(); // Evita comportamento padrão
-          applyFilters(); // Chama a função de filtro
-      }
-    });
-  }
-  
-  // Adicionando os event listeners para os três campos
-  addEnterListener('endDate');
-  addEnterListener('filterCode');
-  

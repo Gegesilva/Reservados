@@ -351,7 +351,6 @@ if ($omitirSerie == '1') {
                     }
                 }
 
-                echo $qtdeProdutos;
                 ?>
                 </tbody>
                 <tfoot>
